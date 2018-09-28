@@ -1,7 +1,10 @@
+// delayed due to change of plans
+
 class Arrangement {
 
       constructor(){
-        this._statusnames={"Reserved","Passed","Paid","Canceled"};
+        this._statusnames=["Reserved","Passed","Paid","Canceled"];
+        this._cursign={"EUR":"€","USD","US $"}
         this.id = CreateNewId("Arrangement");
         this.Reservation_id=0;
         this.Table_id=0;
@@ -16,5 +19,15 @@ class Arrangement {
           if (this.Status<0 || this.Status>=this._statusnames.length) return "Unknown"
           return this._statusnames[this.Status];
       }
-              
+
+      get g_currency() {
+
+      }
+
+      get GetPrice() {
+
+      }
+
+
+
 }
