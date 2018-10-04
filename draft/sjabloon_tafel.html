@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+
+<!-- prototype tafel management -->
+
+<html>
+<head>
+  <title>Tafel manager prototype!</title>
+  <meta charset="utf-8"/>
+  <noscript>Hey? Waar is JavaScript</noscript>
+</head>
+
+<body>
+  <div id="tafelcontent"></div>
+</body>
+
+<script>
+"use strict";
+let nid=0;
+function ObjectID(d){ nid++; return nid;}
+
+class Table{
+  constructor(data){
+     this.id=ObjectID("table");
+     this.maxchairs=data.maxchairs || 4; // if not set 4 will be used by default
+     this.reservations=[]; // contains guest numbers. TODO: replace array with direct database readout over time!
+     this.orders=[]; // link to orders ??
+  }
+
+  addguest(guestid){
+    this.reservations.push(guestid);
+    // TODO: check if a number if present and if the guest_id exists at all!
+    // Link can provide guest information!
+  }
+}
+
+let nieuwetafel = "<table><caption>Nieuwe Tafel</caption><tr valign=top><td align=right>Aantal stoelen</td><td><input type=text id=chairs value='4'></td></tr><tr><td></td><td><input type=submit value=\"opslaan\"></td></tr></table>";
+tafelcontent.innerHTML=nieuwetafel;
+
+</script>
