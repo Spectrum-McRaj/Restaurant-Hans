@@ -1,10 +1,10 @@
 "use strict";
 
+const ObjectID=require("./ObjectID");
 
 
 class Table{
   constructor(data){
-     const ObjectID=require("./ObjectID");
      this.id=ObjectID(this,"table");
      this.maxchairs=data.maxchairs || 4; // if not set 4 will be used by default
      this.reservations=[]; // contains guest numbers. TODO: replace array with direct database readout over time!
@@ -25,6 +25,7 @@ class Table{
     }
     return ret;
   }
+  
 }
 
 if (module) module.exports = Table;
