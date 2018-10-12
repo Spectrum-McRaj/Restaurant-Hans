@@ -2,4 +2,13 @@
 ## Hans
 
 
-Push
+# set up!
+- Jeroen
+- Rob
+- Andries
+- Christoffel
+
+
+# to do
+- Martijn
+
