@@ -7,8 +7,5 @@
 - Rob
 - Andries
 - Christoffel
-
-
-# to do
 - Martijn
 
