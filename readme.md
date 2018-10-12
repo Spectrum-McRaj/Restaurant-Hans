@@ -2,4 +2,10 @@
 ## Hans
 
 
-Push
+# set up!
+- Jeroen
+- Rob
+- Andries
+- Christoffel
+- Martijn
+
