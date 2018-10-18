@@ -34,7 +34,16 @@ class Table{
   }
 }
 */
-let nieuwetafel = "<table><caption>New Restaurant Table</caption><tr valign=top><td align=right>Number of chairs</td><td><input type=text id=chairs value='4'></td></tr><tr><td></td><td><input type=submit value=\"Add =>\"></td></tr></table>";
+const processed = []
+const process=()=>{
+  let newtable={ id:processed.length, chairs:Number(document.getElementById('chairs').value) }
+  processed.push(newtable);
+  document.getElementById('prototype').innerHTML="<hr width=80%>"+JSON.stringify(processed).replace(/\}\,/g,"},<br>",-1);
+  console.clear();
+  console.log( JSON.stringify(processed).replace(/\}\,/g,"},\n",));
+}
+
+let nieuwetafel = "<table><caption>New Restaurant Table</caption><tr valign=top><td align=right>Number of chairs</td><td><input type=text id=chairs value='4'></td></tr><tr><td></td><td><input style='color:#00b4ff; background-color:#00000f;' onclick='process();' type=submit value=\"Add =>\"></td></tr></table><div id='prototype'></div>";
 tafelcontent.innerHTML=nieuwetafel;
 
 </script>
