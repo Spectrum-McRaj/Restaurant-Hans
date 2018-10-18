@@ -3,7 +3,7 @@ const temp_database = require("./temp_database");
 const ObjectId = require("./ObjectID.js");
 
 
-// /* test
+ /* test
 const tafel=require("./class_table");
 let t=[];
 for (i=0;i<=20;i++) t.push(new tafel({maxchairs:Math.ceil(Math.random()*10)}));
