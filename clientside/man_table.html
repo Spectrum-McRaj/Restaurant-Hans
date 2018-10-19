@@ -11,6 +11,8 @@
 
 <body>
   <div id="tafelcontent"></div>
+  <p>
+  <table id="tafeledit"></div>
 </body>
 
 <script>
@@ -22,7 +24,7 @@ function ObjectID(d){ nid++; return nid;}
 class Table{
   constructor(data){
      this.id=ObjectID("table");
-     this.maxchairs=data.maxchairs || 4; // if not set 4 will be used by default
+     this.maxseats=data.maxseats || 4; // if not set 4 will be used by default
      this.reservations=[]; // contains guest numbers. TODO: replace array with direct database readout over time!
      this.orders=[]; // link to orders ??
   }
@@ -36,14 +38,41 @@ class Table{
 */
 const processed = []
 const process=()=>{
-  let newtable={ id:processed.length, chairs:Number(document.getElementById('chairs').value), kidchairs:Number(document.getElementById('kidchairs').value) }
+  let newtable={ id:processed.length,
+    seats:Number(document.getElementById('seats').value),
+    wchfriendly:document.getElementById('wchfriendly').checked
+  }
   processed.push(newtable);
-  document.getElementById('prototype').innerHTML="<hr width=80%>"+JSON.stringify(processed).replace(/\}\,/g,"},<br>",-1);
+  //document.getElementById('prototype').innerHTML="<hr width=80%>"+JSON.stringify(processed).replace(/\}\,/g,"},<br>",-1);
   console.clear();
   console.log( JSON.stringify(processed).replace(/\}\,/g,"},\n",));
+  tablelist();
 }
 
-let nieuwetafel = "<table><caption>New Restaurant Table</caption><tr valign=top><td align=right>Number of chairs</td><td><input style='color:#ffb400; background-color:#0f0b00;' type=text id=chairs value='4'></td></tr><tr valign=top><td align=right>Number of children'chairs</td><td><input style='color:#ffb400; background-color:#0f0b00;' type=text id=kidchairs value='2'></td></tr><tr><td></td><td><input style='color:#00b4ff; background-color:#00000f;' onclick='process();' type=submit value=\"Add =>\"></td></tr></table><div style='font-family:courier; color:#b4ff00; background-color:#0b0f00;' id='prototype'></div>";
+let nieuwetafel = `
+   <table>
+      <caption>New Restaurant Table</caption>
+         <tr valign=top><td align=right>Number of seats</td><td><input style='color:#ffb400; background-color:#0f0b00;' type=text id=seats value='4'></td></tr>
+         <tr><td align=right>Wheelchair friendly:</td><td><input value=1 id='wchfriendly' name='wchfriendly' type=checkbox> yes</td></tr>
+         <tr><td></td><td><input style='color:#00b4ff; background-color:#00000f;' onclick='process();' type=submit value=\"Add =>\"></td></tr>
+
+         <!-- demo -->
+         <!-- </table><div style='font-family:courier; color:#b4ff00; background-color:#0b0f00;' id='prototype'></div> -->
+         `;
 tafelcontent.innerHTML=nieuwetafel;
 
+const tablelist=()=>{
+  let o="<caption>Modify tables</caption>\n"
+  let checked={true:"checked",false:""}
+  for (let id=0;id<processed.length;id++){
+    o+="<tr valign=top><td align=right>";
+    o+=id;
+    o+="</td><td><input type=text id=\"eseats"+id+"\" value=\""+processed[id].seats+"\" onchange='processed["+id+"].seats=document.getElementById(\"eseats"+id+"\").value;'></td>";
+    o+="<td><input type=checkbox id='ewcf"+id+"' "+checked[processed[id].wchfriendly]+" onclick='processed["+id+"].wchfriendly=document.getElementById(\"ewcf"+id+"\").checked;'> Wheelchair friendly</td>";
+//    o+="<td><input type=checkbox id='ewcf"+id+"' "+checked[processed[id].wchfriendly]+" onclick='processed["+id+"].wchfriendly=!processed["+id+"].wchfriendly;'> Wheelchair friendly</td>";
+    o+="</tr>\n";
+  }
+  console.log(o); // debug;
+  tafeledit.innerHTML=o;
+}
 </script>
