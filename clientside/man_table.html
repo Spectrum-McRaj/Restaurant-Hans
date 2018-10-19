@@ -40,8 +40,13 @@ const processed = []
 const process=()=>{
   let newtable={ id:processed.length,
     seats:Number(document.getElementById('seats').value),
-    wchfriendly:document.getElementById('wchfriendly').checked
+    wchfriendly:document.getElementById('wchfriendly').checked,
+    tabnumber:document.getElementById("tabnumber").value
   }
+  let n=Number(document.getElementById("tabnumber").value)+1;
+  if(isNaN(n)) n=1;
+  tabnumber:document.getElementById("tabnumber").value=n;
+
   processed.push(newtable);
   //document.getElementById('prototype').innerHTML="<hr width=80%>"+JSON.stringify(processed).replace(/\}\,/g,"},<br>",-1);
   console.clear();
@@ -52,6 +57,7 @@ const process=()=>{
 let nieuwetafel = `
    <table>
       <caption>New Restaurant Table</caption>
+      <tr valign=top><td align=right>Restaurant Table number:</td><td><input style='color:#ffb400; background-color:#0f0b00;' type=text id=tabnumber value='1'></td></tr>
          <tr valign=top><td align=right>Number of seats</td><td><input style='color:#ffb400; background-color:#0f0b00;' type=text id=seats value='4'></td></tr>
          <tr><td align=right>Wheelchair friendly:</td><td><input value=1 id='wchfriendly' name='wchfriendly' type=checkbox> yes</td></tr>
          <tr><td></td><td><input style='color:#00b4ff; background-color:#00000f;' onclick='process();' type=submit value=\"Add =>\"></td></tr>
@@ -62,17 +68,19 @@ let nieuwetafel = `
 tafelcontent.innerHTML=nieuwetafel;
 
 const tablelist=()=>{
-  let o="<caption>Modify tables</caption>\n"
+  let o="<caption>Modify tables</caption><tr style='color:#ffff00; background:#0f0f00;'><th>id</th><th>Table Number</th><th>Seats</th><th>Wheelchair friendly</th></tr>\n"
   let checked={true:"checked",false:""}
   for (let id=0;id<processed.length;id++){
     o+="<tr valign=top><td align=right>";
     o+=id;
-    o+="</td><td><input type=text id=\"eseats"+id+"\" value=\""+processed[id].seats+"\" onchange='processed["+id+"].seats=document.getElementById(\"eseats"+id+"\").value;'></td>";
+    o+="</td>";
+    o+="<td><input type=text id=\"tabn"+id+"\" value=\""+processed[id].tabnumber+"\" onchange='processed["+id+"].tabnumber=document.getElementById(\"tabn"+id+"\").value;'></td>";
+    o+="<td><input type=text id=\"eseats"+id+"\" value=\""+processed[id].seats+"\" onchange='processed["+id+"].seats=document.getElementById(\"eseats"+id+"\").value;'></td>";
     o+="<td><input type=checkbox id='ewcf"+id+"' "+checked[processed[id].wchfriendly]+" onclick='processed["+id+"].wchfriendly=document.getElementById(\"ewcf"+id+"\").checked;'> Wheelchair friendly</td>";
 //    o+="<td><input type=checkbox id='ewcf"+id+"' "+checked[processed[id].wchfriendly]+" onclick='processed["+id+"].wchfriendly=!processed["+id+"].wchfriendly;'> Wheelchair friendly</td>";
     o+="</tr>\n";
   }
-  console.log(o); // debug;
+  //console.log(o); // debug;
   tafeledit.innerHTML=o;
 }
 </script>
