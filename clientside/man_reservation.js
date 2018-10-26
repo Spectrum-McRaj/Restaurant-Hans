@@ -19,7 +19,16 @@ const Modify = (id) => {
     alert("that id does not exist!");
   }
   alert("Modify feature not yet implemented!\nPlease combe back later!")
+}
 
+const CancelR = (id) => {
+  let rmv=undefined;
+  for(let i in reservations){
+    if (i===id) rmv=i;
+  }
+  if (rmv===undefined) { alert(`Record #${id} does not exist`); return; }
+  if (confirm(`Are you sure you want to cancel reservation #${id}?`)) reservations.slice(rmv,1);
+  updatepage();
 }
 
 const updatepage = () => {
