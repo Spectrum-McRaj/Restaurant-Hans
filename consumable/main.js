@@ -3,26 +3,43 @@
 function objectId(id,type){
   return "1234rfd";
 }
-let Consumable = require('./consumable');
-let Ingredient = require('./ingredient');
+//let Consumable = require('./consumable');
+//let Ingredient = require('./ingredient');
 let consumables = [];
-let ingredients = [];
 
-
+function show(){
+    document.getElementById("output").innerHTML = "consumables: </br>";
+    console.log("in show()");
+    for(let i = 0; i < consumables.length; i++){
+    document.getElementById("output").innerHTML += ("Menu item " + (i+1) + ": Name: " + consumables[i].name + ", Price: €" + consumables[i].price + ", type: " + consumables[i].type + ", ingredients: " + consumables[i].ingredients + "</br>");
+    }
+    console.log("for loop complete");
+}
 
 function newCons(){
-  console.clear();
-  let input = document.getElementById("input1").value;
-  let newObj = new Consumable({id:objectId(input,"menuItem"), name:input, price:3, status:"sold out", ingredients:[["name", 3]["name1", 5]], type:"air", discription:"bla bla bla di bla bla bla..." });
+  //console.log("ingredient: " + document.getElementById("inputDrop").value + "    amount: " + document.getElementById("amountIngr").value);
+  let inputName = document.getElementById("name").value;
+  console.log("input name: " + inputName);
+  let inputPrice = document.getElementById("price").value;
+  console.log("input price: " + inputPrice);
+  let inputType = document.getElementById("type").value;
+  console.log("input type: " + inputType);
+  let dropInputValue = document.getElementById("inputDrop").value;
+  console.log("input ingredient: " + dropInputValue);
+  //console.log(dropInputValue);
+  let newObj = new Consumable({id:objectId(inputName,"menuItem"),
+                                           name:inputName,
+                                           price:inputPrice,
+                                           status:"sold out",
+                                           ingredients:[[document.getElementById("inputDrop").value,document.getElementById("amountIngr").value]],
+                                           type:inputType,
+                                           discription:"bla bla bla di bla bla bla..." });
   consumables.push(newObj);
-  for(let i = 0; i < consumables.length; i++){
-    console.log("menu item " + (i+1) + ": " + consumables[i].name);
-  }
-}
-
-}
-function main() {
-  let newObj = new Consumable({id:"wvfw", name:"cola", price:3, status:"sold out", ingredients:"none", type:"air", discription:"bla bla bla di bla bla bla..." });
-  consumables.push(newObj);
-  console.log("new item: " + newObj.name/* + newObj.toString(", ")*/);
+  console.log("consumable class instence made and pushed to the array");
+  //ingredients.push([document.getElementById("inputDrop").value + "    amount: " + document.getElementById("amountIngr").value]);
+  show();
+  console.log("button handler succesfully finnished");
+  /*for(let i = 0; i < ingredients.length; i++){
+    console.log("ingredient " + (i+1) + ": " + ingredients[i]);
+  }*/
 }

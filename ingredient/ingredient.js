@@ -1,6 +1,6 @@
 "use strict"
 
-module.exports = class Ingredient{
+/*module.exports = */class Ingredient{
   constructor(data){
     this.name = data.name;
     this.price = data.price;
