@@ -11,10 +11,9 @@ function objectId(id,type){
     this.price = data.price;
     this.status = data.status;
     this.ingredients = data.ingredients; //is array of id's
-    //console.log("in constructor: ");
-    //console.log(this.ingredients);
     this.type = data.type;
     this.description = data.description;
+    console.log("consumable with id: " + this.id + "arrived at the end of the constructor");
   }
 
   get healthInfo() {
