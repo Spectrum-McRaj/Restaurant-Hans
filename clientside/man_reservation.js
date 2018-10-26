@@ -41,3 +41,5 @@ const updatepage = () => {
   let e = getElementById("ReservationTable");
   e.innerHTML=output;
 }
+
+console.log("Manager loaded!")
