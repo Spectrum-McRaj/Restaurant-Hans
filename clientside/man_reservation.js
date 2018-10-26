@@ -2,7 +2,7 @@
 
 let reservations = []
 // /*
-for (i=0;i<Math.random()*200,i++) reservations.push( { id:i, name:"Mr Nummer"+i} );
+for (i=0;i<Math.random()*200;i++) reservations.push( { id:i, name:"Mr Nummer"+i } );
 const getByID=(id)=>{
   for(let r of reservations) if (r===r.id) return r;
   throw new Exception("No record on that number!")
@@ -38,7 +38,7 @@ const updatepage = () => {
     output+=`<tr valign=top><td align=right>${rsrvtn.id}</td><td>${rsrvtn.name}</td><td><input type=button onclick="Modify(${rsrvtn.id});" value="Modify">&nbsp;<input type=button onclick="CancelR(${rsrvtn.id});" value="Cancel"></td></tr>\n`    ;
   }
   output+="</table>";
-  let e = getElementById("ReservationTable");
+  let e = document.getElementById("ReservationTable");
   e.innerHTML=output;
 }
 
