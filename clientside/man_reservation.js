@@ -3,8 +3,24 @@
 let reservations = []
 // /*
 for (i=0;i<Math.random()*200,i++) reservations.push( { id:i, name:"Mr Nummer"+i} );
+const getByID=(id)=>{
+  for(let r of reservations) if (r===r.id) return r;
+  throw new Exception("No record on that number!")
+}
 
 // */
+
+
+const Modify = (id) => {
+  let r;
+  try{
+    r = getByID(id);
+  } catch(e) {
+    alert("that id does not exist!");
+  }
+  alert("Modify feature not yet implemented!\nPlease combe back later!")
+
+}
 
 const updatepage = () => {
   let output = "<table><caption>reservations</captions>\n";
