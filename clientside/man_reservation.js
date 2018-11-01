@@ -2,8 +2,14 @@
 
 let reservations = []
 // /*
-let namen = ["Mr. X","Andries","Ans","Christoffel","Gijs","Nick","Jeroen","Rob","Raymond","Ron","Theo","Laura","Bart","Donald Trump","Barack Obama","Bill Clinton","George H.W. Bush","George W. Bush","Ronald Ragon","Jimmy Carter","Ronald Raegon","Richard Nixon","Nils van Buren",
-             "Abraham Lincoln", "George Washington" ];
+let namen = ["Mr. X","Andries","Ans","Christoffel","Gijs","Nick","Jeroen","Rob","Raymond","Ron","Theo","Laura","Bart",
+             "Donald Trump","Barack Obama","Bill Clinton",
+             "George H.W. Bush","George W. Bush","Ronald Ragon","Jimmy Carter","Ronald Raegon","Richard Nixon","Nils van Buren",
+             "Abraham Lincoln", "George Washington",
+             "Schimmelpenninck","Thorbecke","Dries van Agt","Joop den Uyl","Ruud Lubbers","Wim Kok","Jan-Peter Balkellende","Mark Rutte",
+             "Francois Mitterand","Jaques Chiraq","Francois Hollande","Emmanuel Macron",
+             "Helmut Kohl","Schoeder","Angela Merkel"
+           ];
 for (i=0;i<Math.random()*200;i++) reservations.push( { id:i, name:namen[Math.floor(Math.random()*namen.length)] } );
 const getByID=(id)=>{
   for(let r of reservations) if (id===r.id) return r;
