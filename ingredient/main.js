@@ -19,8 +19,6 @@ function show(){
 function newIngr(){
   let inputName = document.getElementById("nameIngr").value;
   console.log("input name: " + inputName);
-  let inputStock = document.getElementById("stock").value;
-  console.log("input stock: " + inputStock);
   let inputPrice = document.getElementById("priceIngr").value;
   console.log("input price: " + inputPrice);
   let inputUnit = document.getElementById("unitInput").value;
@@ -28,7 +26,7 @@ function newIngr(){
   let arrIngr = {id: (inputName + "123456"),
                  name: inputName,
                  price: inputPrice,
-                 inStock: inputStock,
+                 inStock: 0,
                  unit: inputUnit};
   ingredients.push(new Ingredient(arrIngr));
   console.log("ingredient class instence made and pushed to the array");
