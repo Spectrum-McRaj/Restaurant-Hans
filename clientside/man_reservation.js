@@ -5,8 +5,8 @@ let reservations = []
 let namen = ["Mr. X","Andries","Ans","Christoffel","Gijs","Nick","Jeroen","Rob","Raymond","Ron","Theo","Laura","Bart",
              "Donald Trump","Barack Obama","Bill Clinton",
              "George H.W. Bush","George W. Bush","Ronald Ragon","Jimmy Carter","Ronald Raegon","Richard Nixon","Nils van Buren",
-             "Abraham Lincoln", "George Washington",
-             "Schimmelpenninck","Thorbecke","Dries van Agt","Joop den Uyl","Ruud Lubbers","Wim Kok","Jan-Peter Balkellende","Mark Rutte",
+             "Abraham Lincoln", "George Washington", "John Fitzerald Kennedy",
+             "Gerrit Schimmelpenninck","Johan Rudolf", "Thorbecke","Dries van Agt","Joop den Uyl","Ruud Lubbers","Wim Kok","Jan-Peter Balkellende","Mark Rutte",
              "Francois Mitterand","Jaques Chiraq","Francois Hollande","Emmanuel Macron",
              "Helmut Kohl","Schoeder","Angela Merkel"
            ];
@@ -31,7 +31,8 @@ const Modify = (id) => {
 }
 
 const CancelAsk = (id) => {
-  let msg = "<h1 align=center style=\"color: rgb(255,0,0)\">* W * A * R * N * I * N * G *</h1>\n";
+  //let msg = "<h1 align=center style=\"color: rgb(255,0,0)\">* W * A * R * N * I * N * G *</h1>\n";
+  let msg = "<h1 align=center style=\"color: rgb(255,0,0)\">Attention!</h1>\n";
   msg += `You are about to remove reservation #${id} from ${reservations[id].name}<br>This action cannot be undone<br><br>Are you sure?<br>`;
   msg += "<input type=button value=\"Yes\" onclick=\"CancelR("+id+");\">&nbsp;<input type=button value=\"No\" onclick=\"updatepage();\"><p>";
   let e = document.getElementById("ReservationTable");
