@@ -11,7 +11,7 @@ function show(){
     document.getElementById("output").innerHTML = "consumables: </br>";
     console.log("in show()");
     for(let i = 0; i < consumables.length; i++){
-    document.getElementById("output").innerHTML += ("Menu item " + (i+1) + ": Name: " + consumables[i].name + ", Price: €" + consumables[i].price + ", type: " + consumables[i].type + ", ingredients: " + consumables[i].ingredients + "</br>");
+    document.getElementById("output").innerHTML += ("Menu item " + (i+1) + ": Name: " + consumables[i].name + ", Price: €" + consumables[i].price + ", type: " + consumables[i].type + ", id: " + consumables[i].id + ", ingredients: " + consumables[i].ingredients + "</br>");
     }
     console.log("for loop complete");
 }
