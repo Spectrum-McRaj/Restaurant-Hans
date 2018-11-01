@@ -7,6 +7,7 @@ let namen = ["Mr. X","Andries","Ans","Christoffel","Gijs","Nick","Jeroen","Rob",
              "George H.W. Bush","George W. Bush","Ronald Ragon","Jimmy Carter","Ronald Raegon","Richard Nixon","Nils van Buren",
              "Abraham Lincoln", "George Washington", "John Fitzerald Kennedy",
              "Gerrit Schimmelpenninck","Johan Rudolf", "Thorbecke","Dries van Agt","Joop den Uyl","Ruud Lubbers","Wim Kok","Jan-Peter Balkellende","Mark Rutte",
+             "Gijsbert van Tienhoven", "Theo de Meester","Willem Drees",
              "Francois Mitterand","Jaques Chiraq","Francois Hollande","Emmanuel Macron",
              "Helmut Kohl","Schoeder","Angela Merkel"
            ];
@@ -83,7 +84,7 @@ AddAction(f){
 
 function // void
 AddNewReservation(){
-   let fields = ["Name","Table", "Date", "Time"];
+   let fields = ["Name","Table", "Persons", "Date", "Time"];
    let output = "<table><caption>New Reservation</caption>";
    for (f of fields) {
      output += `<tr valign=top><td align=right>${f}</td><td><input id='${f}' type=text size=40></td>`;
