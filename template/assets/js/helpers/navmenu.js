@@ -20,7 +20,7 @@ function navMenu( items ){
       for( let subitem of item.items ){
         let navMenu_li_sub = document.createElement( 'li' )
         let navMenu_a_sub = document.createElement( 'a' )
-        navMenu_a_sub.innerHTML = item.label
+        navMenu_a_sub.innerHTML = subitem.label
         navMenu_a_sub.setAttribute( 'id', item.id )
         navMenu_a_sub.setAttribute( 'href', `${item.id}.html`)
         navMenu_a_sub.addEventListener( 'click', (event) => {
