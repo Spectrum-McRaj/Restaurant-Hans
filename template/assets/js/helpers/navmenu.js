@@ -27,7 +27,7 @@ function navMenu( items ){
           event.preventDefault();
           pageLoader( event.target )
         });
-        navMenu_li_sub.appendChild( navMenu_a )
+        navMenu_li_sub.appendChild( navMenu_a_sub )
         navMenu_ul_sub.appendChild( navMenu_li_sub )
       }
       navMenu_li.appendChild( navMenu_ul_sub )
