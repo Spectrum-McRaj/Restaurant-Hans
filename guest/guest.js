@@ -1,30 +1,14 @@
-"use-strict";
+'use strict'
 
-// module.exports.Guest = class Guest {
 class Guest {
-  constructor(data) {
-    // for ( let k in data ) this[k]=data[k];
+  constructor(id, firstname, preposition, lastname,
+  dateofbirth, gender, email, phonenumber, street, housenumber, city, postalcode) {
 
-    // this._id = objectId(data.id, "guest");  //This is what it should be later.
-    if(!data){
-      this._id = undefined;
-      this._firstname = undefined;
-      this._preposition= undefined;
-      this._lastname= undefined;
-      this._dateofbirth= undefined;
-      this._gender= undefined;
-      this._email= undefined;
-      this._phonenumber= undefined;
-      this._street = undefined;
-      this._housenumber = undefined;
-      this._city= undefined;
-      this._postalcode= undefined;
-      // this._groupsize= undefined;
-      // this._dateofvisit= undefined;
-      // this._arrangement= undefined;
-      //Error message???
-    }else{
-      this._id = data.id; //temp
+    Object.assign({id, firstname, preposition, lastname, // arguments als object
+    dateofbirth, gender, email, phonenumber, street, housenumber, city, postalcode});
+
+
+      this._id = data.id;
       this._firstname = data.firstname;
       this._preposition = data.preposition;
       this._lastname = data.lastname;
@@ -36,13 +20,11 @@ class Guest {
       this._housenumber = data.housenumber;
       this._city = data.city;
       this._postalcode = data.postalcode;
-      // this._groupsize = data.groupsize;
-      // this._dateofvisit = data.dateofvisit;
-      // this._arrangement = data.arrangement;
-    }
+
+
   }
 
-  get profile() {
+  get profile() { // overbodig(?); instantie geeft hetzelfde terug?
     return {
       id: this._id,
       firstname: this._firstname,
@@ -55,7 +37,7 @@ class Guest {
       street: this._street,
       housenumber: this._housenumber,
       city: this._city,
-      postalcode: this._postalcode,
+      postalcode: this._postalcode
       // groupsize: this._groupsize,
       // dateofvisit: this._dateofvisit,
       // arrangement: this._arrangement,
@@ -76,7 +58,7 @@ class Guest {
       _street: 'Street',
       _housenumber: 'House nr.',
       _city: 'City',
-      _postalcode: 'Postal code',
+      _postalcode: 'Postal code'
       // _groupsize: 'Group size',
       // _dateofvisit: 'Date of visit',
       // _arrangement: 'Arrangement',
@@ -86,3 +68,22 @@ class Guest {
 
 
 }
+let data = {
+  id: 23456,
+  firstname: 'John',
+  preposition: '',
+  lastname: 'Doe',
+  dateofbirth: '01-01-01',
+  gender: 'male',
+  email: 'j.doe@provider.com',
+  phonenumber: '01234 56789',
+  street: 'Main Street',
+  housenumber: 12,
+  city: 'Hometown',
+  postalcode: '1234 AB'
+}
+
+let classInst = new Guest( data )
+console.log( classInst )
+classInst = new Guest( 23456, 'John', '', '01-01-01', 'male',  'j.doe@provider.com', '01234 56789', 'Main Street', 12, '1234 AB' )
+console.log( classInst )
