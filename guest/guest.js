@@ -1,27 +1,47 @@
 'use strict'
-
+/*
+* guest/guest.js
+* BELANGRIJK; wijzig de properties naar (alleen) wat nodig is voor
+* reservering (ivm privacy e.d. zoals genoemd tijdens de demo)
+*/
 class Guest {
   constructor(id, firstname, preposition, lastname,
   dateofbirth, gender, email, phonenumber, street, housenumber, city, postalcode) {
+    //console.log(arguments)
+  if(typeof id === 'object'){  // arguments als object
+    let data = id; // feitelijk id parameter dus..
+    this._id = data.id;
+    this._firstname = data.firstname;
+    this._preposition = data.preposition;
+    this._lastname = data.lastname;
+    this._dateofbirth = data.dateofbirth;
+    this._gender = data.gender;
+    this._email = data.email;
+    this._phonenumber = data.phonenumber;
+    this._street = data.street;
+    this._housenumber = data.housenumber;
+    this._city = data.city;
+    this._postalcode = data.postalcode;
+  } else { // specifieke arguments uit parameters
+    this._id = id;
+    this._firstname = firstname;
+    this._preposition = preposition;
+    this._lastname = lastname;
+    this._dateofbirth = dateofbirth;
+    this._gender = gender;
+    this._email = email;
+    this._phonenumber = phonenumber;
+    this._street = street;
+    this._housenumber = housenumber;
+    this._city = city;
+    this._postalcode = postalcode;
+  }
 
-    Object.assign({id, firstname, preposition, lastname, // arguments als object
-    dateofbirth, gender, email, phonenumber, street, housenumber, city, postalcode});
+///*
 
 
-      this._id = data.id;
-      this._firstname = data.firstname;
-      this._preposition = data.preposition;
-      this._lastname = data.lastname;
-      this._dateofbirth = data.dateofbirth;
-      this._gender = data.gender;
-      this._email = data.email;
-      this._phonenumber = data.phonenumber;
-      this._street = data.street;
-      this._housenumber = data.housenumber;
-      this._city = data.city;
-      this._postalcode = data.postalcode;
 
-
+//*/
   }
 
   get profile() { // overbodig(?); instantie geeft hetzelfde terug?
@@ -68,7 +88,8 @@ class Guest {
 
 
 }
-let data = {
+/*
+let data_ = {
   id: 23456,
   firstname: 'John',
   preposition: '',
@@ -83,7 +104,8 @@ let data = {
   postalcode: '1234 AB'
 }
 
-let classInst = new Guest( data )
+let classInst = new Guest( data_ )
 console.log( classInst )
 classInst = new Guest( 23456, 'John', '', '01-01-01', 'male',  'j.doe@provider.com', '01234 56789', 'Main Street', 12, '1234 AB' )
-console.log( classInst )
+console.log( classInst.profile )
+*/
