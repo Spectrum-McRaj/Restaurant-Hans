@@ -18,22 +18,44 @@
     'modules/menu',
     'modules/ingredient',
     'modules/table',
+    // Template
+    'template/navheader',
+    'template/navmenu',
+    'template/pageloader',
 
     // Helpers
-    'helpers/navmenu',
-    'helpers/pageloader'
+    'helpers/crEl',
+    'helpers/glob',
+    'helpers/utils'
 
   ]// requirejs
   ,()=>{
+    buildHeaderNav()
     let pages = [
-      { id : 'reservation', label : 'Reservations' },
-      { id : 'guest', label : 'Guests' },
-      { id : 'menu', label : 'Menu', items : [
-        { id : 'ingredient', label : 'Ingredient'}
-      ]},
-      { id : 'table', label : 'Tables' }
+      {
+        id : 'home',
+        label : 'Home'
+      },{
+        id : 'reservations',
+        label : 'Reservations'
+      },{
+        id : 'guests',
+        label : 'Guests'
+      },{
+        id : 'menu',
+        label : 'Menu',
+        items : [
+          {
+            id : 'ingredients',
+            label : 'Ingredient'
+          }
+        ]
+      },{
+        id : 'tables',
+        label : 'Tables'
+      }
     ] // pages
     navMenu( pages )
-    console.log( 'test ')
+
   })
 })()
