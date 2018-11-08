@@ -14,7 +14,6 @@
 
 
     // Template
-    'template/navheader',
     'template/navmenu',
     'template/pageloader',
 
@@ -32,7 +31,7 @@
 
   ]// requirejs
   ,()=>{
-    buildHeaderNav();
+    
     glob( 'vars', 'pages', [
       {
         id : 'home',
