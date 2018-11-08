@@ -12,12 +12,7 @@
     //'class/Ingredient',
     //'class/Table',
 
-    // Modules
-    'modules/reservation',
-    'modules/guest',
-    'modules/menu',
-    'modules/ingredient',
-    'modules/table',
+
     // Template
     'template/navheader',
     'template/navmenu',
@@ -26,7 +21,14 @@
     // Helpers
     'helpers/crEl',
     'helpers/glob',
-    'helpers/utils'
+    'helpers/utils',
+
+    // Modules
+    'modules/reservation',
+    'modules/guest',
+    'modules/menu',
+    'modules/ingredient',
+    'modules/table',
 
   ]// requirejs
   ,()=>{

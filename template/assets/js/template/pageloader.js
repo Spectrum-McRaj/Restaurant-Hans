@@ -10,8 +10,10 @@ function pageLoader( target ){ // event target element
 function loadPage( url, id ){
   loadMain( url, () => {
       pageFunction( id );
-      // glob_.func[ page ]()
-      // glob( 'func', page )
+      //_glob.func[ page ]
+      //console.log( page )
+      //console.log(_glob.func)
+      //glob( 'func', page )
   });
 }
 

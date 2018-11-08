@@ -58,5 +58,4 @@ glob( 'obj', 'bar', {
 for( let item of Object.getOwnPropertyNames( _glob.obj.bar ) ){
   _glob.func.foo( _glob.vars[ item ]  ); // functie oproepen
 }
-console.log( _glob )
-*/
+console.log( _glob ) */
