@@ -30,8 +30,8 @@
 
   ]// requirejs
   ,()=>{
-    buildHeaderNav()
-    let pages = [
+    buildHeaderNav();
+    glob( 'vars', 'pages', [
       {
         id : 'home',
         label : 'Home'
@@ -54,8 +54,8 @@
         id : 'tables',
         label : 'Tables'
       }
-    ] // pages
-    navMenu( pages )
+    ]); // pages
+    navMenu( _glob.vars.pages );
 
-  })
-})()
+  });
+})();

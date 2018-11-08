@@ -14,8 +14,8 @@
 class Glob {
   constructor() {
     this.vars = {};
-    this.functions = {};
-    this.objects = {};
+    this.func = {};
+    this.obj = {};
 
     return this
   }
@@ -37,3 +37,26 @@ function glob( element, key, val ){
   //console.log( glob );
   return _glob[ element ]
 }
+/*
+
+glob( 'vars', 'foo', 'bar'); // aanmaken
+console.log( glob( 'vars' ) )
+
+
+glob( 'vars', 'bar', _glob.vars.foo ); // aanmaken/opvragen
+console.log( glob( 'vars' ) );
+
+glob( 'func', 'foo', ( show ) => { // functie aanmaken
+  console.log( show );
+});
+
+glob( 'obj', 'bar', {
+  foo: 'bar',
+  bar: 'foo'
+});
+
+for( let item of Object.getOwnPropertyNames( _glob.obj.bar ) ){
+  _glob.func.foo( _glob.vars[ item ]  ); // functie oproepen
+}
+console.log( _glob )
+*/
