@@ -55,7 +55,7 @@ nav#primary {
     }
     nav#primary ul li a.active {
       color: #235f82;
-      background-color: #fff;
+      background-color: #f7f6f2; /* Same as html/body background-color */
       font-weight: bold;
     }
       nav#primary ul li > ul {
@@ -110,6 +110,12 @@ main#page {
     padding: 24px 96px;
   }
 
+#page-navigation {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
+
 #page-navigation ul {
   list-style: none;
   padding: 0;
@@ -124,7 +130,6 @@ main#page {
   }
     #page-navigation ul > li a {
       padding: 8px 20px;
-      line-height: 28px;
       background-color: #eaeaea;
       border-top-left-radius: 3px;
       border-top-right-radius: 3px;
