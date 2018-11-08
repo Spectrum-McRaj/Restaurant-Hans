@@ -95,7 +95,7 @@ main#page {
     padding: 0;
     display: block;
     height: 100px;
-    background-color: rgb(165,170,170);
+    background-color: rgb(134, 138, 142);
     position: relative;
   }
     main#page .page-header > h2 {
