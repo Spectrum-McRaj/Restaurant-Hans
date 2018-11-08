@@ -31,29 +31,30 @@
 
   ]// requirejs
   ,()=>{
-    
+
     glob( 'vars', 'pages', [
+      //Load these pages
       {
-        id : 'home',
-        label : 'Home'
+        id : 'dashboard',
+        label : 'Dashboard'
       },{
         id : 'reservations',
-        label : 'Reservations'
+        label : 'Manage Reservations'
       },{
         id : 'guests',
-        label : 'Guests'
+        label : 'Manage Guests'
       },{
         id : 'menu',
-        label : 'Menu',
+        label : 'Manage Menu',
         items : [
           {
             id : 'ingredients',
-            label : 'Ingredient'
+            label : 'Manage Ingredients'
           }
         ]
       },{
         id : 'tables',
-        label : 'Tables'
+        label : 'Manage Tables'
       }
     ]); // pages
     navMenu( _glob.vars.pages );
