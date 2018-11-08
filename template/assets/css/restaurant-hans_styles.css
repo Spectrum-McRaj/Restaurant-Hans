@@ -53,6 +53,11 @@ nav#primary {
       position: relative;
       font-size: 14px;
     }
+    nav#primary ul li a.active {
+      color: #235f82;
+      background-color: #fff;
+      font-weight: bold;
+    }
       nav#primary ul li > ul {
         margin-bottom: 12px;
         border-left: 3px solid rgba(255,255,255,.2);
