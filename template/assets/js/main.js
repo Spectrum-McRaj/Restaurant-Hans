@@ -7,11 +7,10 @@
   requirejs([
     // Classes
     'class/Reservation',
-    //'class/Guest',
+    // 'class/Guest',
     //'class/Menu',
-    //'class/Ingredient',
+    // 'class/Ingredient',
     //'class/Table',
-
 
     // Template
     'template/navmenu',
