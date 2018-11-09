@@ -7,13 +7,25 @@ function getReservation( id ){
 overviewReservation();
 
 function overviewReservation(){
+  let overview_fields = [
+    { label : 'Guest', field : 'guest' },
+    { label : 'Time', field : 'time' },
+    { label : 'Persons', field : 'persons' },
+    { label : 'Table', field : 'table' },
+    { label : '', field : 'options' }
+  ]
 
   let table = document.createElement( 'table' ),
   table_thead = document.createElement( 'thead' ),
   table_tr = document.createElement( 'tr' ),
-  table_th = document.createElement( 'th' ),
   ouput = document.getElementById( 'output' );
   table.setAttribute( 'class','table' )
+  for( let field of overview_fields ){
+    let table_th = document.createElement( 'th' ),
+    table_th.innerText = field.label;
+    table_tr.appendChild( table_th );
+  } /*
+  let table_th = document.createElement( 'th' ),
   table_th.innerText = 'Guest';
   table_tr.appendChild( table_th );
 
@@ -35,13 +47,14 @@ function overviewReservation(){
 
   table_th = document.createElement( 'th' );
   table_tr.appendChild( table_th );
+  */
   table_thead.appendChild( table_tr );
   table.appendChild( table_thead );
 
   let table_tbody = document.createElement( 'tbody' );
   for( let item of arrayReservation ) {
     table_tr = document.createElement( 'tr' );
-
+    
     let table_td = document.createElement( 'td' );
     table_td.innerText = item.guest;
     table_tr.appendChild( table_td );
