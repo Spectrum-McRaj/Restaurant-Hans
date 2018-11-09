@@ -9,7 +9,7 @@ overviewReservation();
 function overviewReservation(){
   let overview_fields = [
     { label : 'Guest', field : 'guest' },
-    { label : 'Time', field : 'time' },
+    { label : 'Time', field : 'timestamp' },
     { label : 'Persons', field : 'persons' },
     { label : 'Table', field : 'table' },
     { label : '', field : 'options' }
@@ -21,7 +21,7 @@ function overviewReservation(){
   ouput = document.getElementById( 'output' );
   table.setAttribute( 'class','table' )
   for( let field of overview_fields ){
-    let table_th = document.createElement( 'th' ),
+    let table_th = document.createElement( 'th' );
     table_th.innerText = field.label;
     table_tr.appendChild( table_th );
   } /*
@@ -54,7 +54,35 @@ function overviewReservation(){
   let table_tbody = document.createElement( 'tbody' );
   for( let item of arrayReservation ) {
     table_tr = document.createElement( 'tr' );
-    
+
+    let button_edit = document.createElement( 'button' );
+    button_edit.setAttribute( 'class', 'btn ' )
+    button_edit.innerHTML = 'Edit';
+    button_edit.addEventListener( 'click', (event) => {
+      updateReservation( item.id )
+    });
+
+    let button_delete = document.createElement( 'button' );
+    button_delete.setAttribute( 'class', 'btn ' )
+    button_delete.innerHTML = 'Delete';
+    button_delete.addEventListener( 'click', (event) => {
+      deleteReservation( item.id )
+    });
+
+    for( let field of overview_fields ){
+      let table_td = document.createElement( 'td' );
+      if ( field.field === 'options' ){
+        table_td.appendChild( button_edit );
+        table_td.appendChild( button_delete );
+
+      } else {
+        table_td.innerText = item[ field.field ];
+      }
+
+
+      table_tr.appendChild( table_td );
+    }
+    /*
     let table_td = document.createElement( 'td' );
     table_td.innerText = item.guest;
     table_tr.appendChild( table_td );
@@ -71,29 +99,19 @@ function overviewReservation(){
     table_td.innerText = item.table;
     table_tr.appendChild( table_td );
 
-    let button_edit = document.createElement( 'button' );
-    button_edit.setAttribute( 'class', 'btn ' )
-    button_edit.innerHTML = 'Edit';
-    button_edit.addEventListener( 'click', (event) => {
-      updateReservation( item.id )
-    });
+
     table_td = document.createElement( 'td' );
     table_td.setAttribute( 'style', 'width:50px')
     table_td.appendChild( button_edit );
     table_tr.appendChild( table_td );
 
-    let button_delete = document.createElement( 'button' );
-    button_delete.setAttribute( 'class', 'btn ' )
-    button_delete.innerHTML = 'Delete';
-    button_delete.addEventListener( 'click', (event) => {
-      deleteReservation( item.id )
-    });
+
     table_td = document.createElement( 'td' );
     table_td.setAttribute( 'style', 'width:50px')
     table_td.appendChild( button_delete );
     table_tr.appendChild( table_td );
 
-
+    */
     table_tbody.appendChild( table_tr )
 
   }
