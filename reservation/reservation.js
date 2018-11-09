@@ -60,7 +60,7 @@ function overviewReservation(){
 
       table_tr.appendChild( table_td );
     }
-    
+
     table_tbody.appendChild( table_tr )
 
   }
@@ -95,9 +95,11 @@ function addReservation(){
         // check if date is after today
       });
     }
-    add_form.appendChild( add_form_field );
+    add_form.appendChild( add_form_row );
 
   }
+  let button_submit = document.createElement( 'button' )
+  button_submit.setAttribute( 'class', 'btn btn-primary')
   output.innerHTML  = '';
   output.appendChild( add_form );
   add_form.addEventListener( 'submit', (event) => {
