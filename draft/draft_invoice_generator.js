@@ -17,7 +17,7 @@ function generate_invoice(process_reservation){
   var total=0;
   var calcVAT;
   var output="<table><caption><b>Invoice Molveno</b></caption>";
-  for (let item in process_reservation)   {
+  for (let item of process_reservation)   {
       let dish=dishes[item]
       output += `<tr><td>${dish.desc}</td>`;
       output +  "<td align=right>"+dish.price+"</td></tr>"; // TODO: Make sure this is in a xxxx.yy format
