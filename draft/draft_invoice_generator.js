@@ -11,3 +11,23 @@ let reservation = {
 }
 
 /* einde nep gegevens */
+
+
+function generate_invoice(process_reservation){
+  var total=0;
+  var calcVAT;
+  var output="<table><caption><b>Invoice Molveno</b></caption>";
+  for (let item in process_reservation)   {
+      let dish=dishes[item]
+      output += `<tr><td>${dish.desc}</td>`;
+      output +  "<td align=right>"+dish.price+"</td></tr>"; // TODO: Make sure this is in a xxxx.yy format
+      total  += dish.price;
+    }
+    calcVAT  = total * (VAT/100);
+    output   += "<tr><td></td><td><hr></td></tr>";
+    output   += `<tr><td align=right>Total excl. VAT:</td><td>${total}</td></tr>`;
+    output   += `<tr><td align=right>VAT ${config.VAT}%:</td><td>${calcVAT}</td></tr>`;
+    output   += `<tr><td align=right>Total incl. VAT:</td><td>${total-calcVAT}`;
+}
+
+console.log(generate_invoice(reservation));
