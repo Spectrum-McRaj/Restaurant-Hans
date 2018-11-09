@@ -104,19 +104,19 @@ function addReservation(){
     add_form_row = document.createElement( '' );
 
   }
-  add_form.addEventListener( 'submit' ){
+  add_form.addEventListener( 'submit', (event) => {
     new Reservation()
     new Guest()
-  }
+  });
 }
 
 
 
 function updateReservation(){
   let update_form = document.createElement( 'form' );
-  update_form.addEventListener( 'submit' ){
+  update_form.addEventListener( 'submit', (event) => {
     new Reservation()
-  }
+  });
 }
 
 function deleteReservation(id){
