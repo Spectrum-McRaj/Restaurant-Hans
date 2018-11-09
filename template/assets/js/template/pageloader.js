@@ -41,7 +41,7 @@ function locationHashChanged() {
   pageId = hashLocation.slice(1),
   pageUrl = `${pageId}.html`;
   loadPage( pageUrl, pageId );
-
+  navActiveItm( pageId )
 }
 
 window.onhashchange = locationHashChanged;

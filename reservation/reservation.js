@@ -18,36 +18,14 @@ function overviewReservation(){
   let table = document.createElement( 'table' ),
   table_thead = document.createElement( 'thead' ),
   table_tr = document.createElement( 'tr' ),
-  ouput = document.getElementById( 'output' );
+  output = document.getElementById( 'page_output' );
   table.setAttribute( 'class','table' )
   for( let field of overview_fields ){
     let table_th = document.createElement( 'th' );
     table_th.innerText = field.label;
     table_tr.appendChild( table_th );
-  } /*
-  let table_th = document.createElement( 'th' ),
-  table_th.innerText = 'Guest';
-  table_tr.appendChild( table_th );
+  }
 
-  table_th = document.createElement( 'th' );
-  table_th.innerText = 'Time';
-  table_tr.appendChild( table_th );
-
-  table_th = document.createElement( 'th' );
-  table_th.innerText = 'Persons';
-  table_tr.appendChild( table_th );
-
-  table_th = document.createElement( 'th' );
-  table_th.innerText = 'Table';
-  table_tr.appendChild( table_th );
-
-
-  table_th = document.createElement( 'th' );
-  table_tr.appendChild( table_th );
-
-  table_th = document.createElement( 'th' );
-  table_tr.appendChild( table_th );
-  */
   table_thead.appendChild( table_tr );
   table.appendChild( table_thead );
 
@@ -82,36 +60,7 @@ function overviewReservation(){
 
       table_tr.appendChild( table_td );
     }
-    /*
-    let table_td = document.createElement( 'td' );
-    table_td.innerText = item.guest;
-    table_tr.appendChild( table_td );
-
-    table_td = document.createElement( 'td' );
-    table_td.innerText = item.timestamp;
-    table_tr.appendChild( table_td );
-
-    table_td = document.createElement( 'td' );
-    table_td.innerText = item.persons;
-    table_tr.appendChild( table_td );
-
-    table_td = document.createElement( 'td' );
-    table_td.innerText = item.table;
-    table_tr.appendChild( table_td );
-
-
-    table_td = document.createElement( 'td' );
-    table_td.setAttribute( 'style', 'width:50px')
-    table_td.appendChild( button_edit );
-    table_tr.appendChild( table_td );
-
-
-    table_td = document.createElement( 'td' );
-    table_td.setAttribute( 'style', 'width:50px')
-    table_td.appendChild( button_delete );
-    table_tr.appendChild( table_td );
-
-    */
+    
     table_tbody.appendChild( table_tr )
 
   }
@@ -121,6 +70,7 @@ function overviewReservation(){
 }
 
 function addReservation(){
+  let output = document.getElementById( 'page_output' );
   let add_form = document.createElement( 'form' );
   let add_form_fields = [
     { id : 'name', label : 'Name' },
@@ -132,9 +82,24 @@ function addReservation(){
   for( let field of add_form_fields ){
     let add_form_field = document.createElement( 'input' ),
     add_form_label = document.createElement( 'label' ),
-    add_form_row = document.createElement( '' );
+    add_form_row = document.createElement( 'div' );
+    add_form_row.setAttribute( 'class','form-group' );
+    add_form_label.innerText = field.label;
+    add_form_row.appendChild( add_form_label );
+
+    add_form_field.setAttribute( 'id', field.id );
+    add_form_field.setAttribute( 'class', 'form-control');
+    add_form_row.appendChild( add_form_field )
+    if( field.id === 'date' ){
+      add_form_field.addEventListener( 'keyup', (event) => {
+        // check if date is after today
+      });
+    }
+    add_form.appendChild( add_form_field );
 
   }
+  output.innerHTML  = '';
+  output.appendChild( add_form );
   add_form.addEventListener( 'submit', (event) => {
     new Reservation()
     new Guest()
@@ -154,7 +119,7 @@ function deleteReservation(id){
 
 
   let reservation_data = getReservation( id );
-  let output = document.getElementById( 'output' );
+  let output = document.getElementById( 'page_output' );
   let container_confirm = document.createElement( 'div' );
   container_confirm.setAttribute( 'style', 'padding:25px')
   //header
