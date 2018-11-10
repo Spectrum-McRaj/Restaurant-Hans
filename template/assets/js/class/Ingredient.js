@@ -1,5 +1,7 @@
  'use strict'
-
+ /*
+ * assets/js/class/Ingredient.js
+ */
 class Ingredient{
   constructor( id, name, price, inStock, unit, allergies, type){
     if( typeof id === 'object'){ // arguments als object
@@ -28,7 +30,7 @@ class Ingredient{
     this.inStock += amount;
   }
 
-  getPropertyLabels(){
+  propertyLabels(){
     return {
       id : 'Id',
       name : 'Name',
@@ -39,18 +41,4 @@ class Ingredient{
       type : 'Type'
     }
   }
-} /*
- let data =  {
-   id : 2345,
-   name : 'test',
-   price : 2.23,
-   inStock : 0,
-   unit : 'test',
-   allergies : [],
-   type : 3
- }
- let obj = new Ingredient(data)
- console.log( obj.price )
- obj = new Ingredient( 2345, 'test', 2.23, 0, 'test', [], 3 )
- console.log( obj )
- */
+}

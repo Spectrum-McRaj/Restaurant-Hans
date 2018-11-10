@@ -3,17 +3,13 @@
 * assets/js/helpers/pageloader.js
 */
 function pageLoader( target ){ // event target element
-  let pageUrl = target.getAttribute( 'href' );
-  loadPage(pageUrl, target.id )
+  let pageUrl = target.getAttribute( 'href' ).slice(1);
+  loadPage(`${pageUrl}.html`, target.id )
 }
 
 function loadPage( url, id ){
   loadMain( url, () => {
       pageFunction( id );
-      //_glob.func[ page ]
-      //console.log( page )
-      //console.log(_glob.func)
-      //glob( 'func', page )
   });
 }
 
@@ -25,23 +21,55 @@ function loadMain( url, callback ){
 }
 
 function pageFunction( page ){
+  let functionPath,args
 
-  switch (page) {
+  if( page.indexOf( '/' ) > 0 ) {
+    page = page.split( '/' )
+    functionPath = `${page[0]}/${page[1]}`
+    args = page[2]
+  }else{
+    functionPath = page
+  }
+
+  switch (functionPath) {
     case 'reservations':
       mainReservations()
-
+      break;
+    case 'reservations/overview' :
+      overviewReservations()
+      break;
+    case 'reservations/add' :
+      addReservation()
+      break;
+    case 'reservations/delete' :
+      deleteReservation( args )
       break;
     default:
       // mainHome()
   }
 }
 
-function locationHashChanged() {
+function pageHashLoad() {
   let hashLocation = location.hash,
   pageId = hashLocation.slice(1),
-  pageUrl = `${pageId}.html`;
-  loadPage( pageUrl, pageId );
-  navActiveItm( pageId )
-}
+  pageUrl,
+  pagePrev = glob( 'var' , 'currentPageId');
 
-window.onhashchange = locationHashChanged;
+  if( pageId !==  '' ){
+    navActiveItm( pageId );
+    pageUrl = `${pageId.split('/')[0]}.html`;
+    if( pagePrev ){
+      console.log( `navigated from ${pagePrev} to ${pageId}`)
+      if( pagePrev.split('/')[0] === pageId.split('/')[0] ){
+        pageFunction( pageId );
+      } else {
+        loadPage( pageUrl, pageId );
+        glob( 'var' , 'currentPageId' , pageId);
+      }
+    } else {
+      loadPage( pageUrl, pageId );
+      glob( 'var' , 'currentPageId' , pageId);
+    }
+
+  }
+}

@@ -6,11 +6,14 @@
   'use strict'
   requirejs([
     // Classes
+
+    'class/Guest',
+    'class/Ingredient',
+    'class/Menu',
+    'class/MenuItem',
+    'class/Order',
     'class/Reservation',
-    // 'class/Guest',
-    //'class/Menu',
-    // 'class/Ingredient',
-    //'class/Table',
+    'class/Table',
 
     // Template
     'template/navmenu',
@@ -19,19 +22,22 @@
     // Helpers
     'helpers/crEl',
     'helpers/glob',
+    'helpers/glob_arr', // temporary arrays with dummy data for test/demo purposes
     'helpers/utils',
 
     // Modules
-    'modules/reservation',
     'modules/guest',
-    'modules/menu',
     'modules/ingredient',
+    'modules/menu',
+    'modules/menuitem',
+    'modules/order',
+    'modules/reservation',
     'modules/table',
 
   ]// requirejs
   ,()=>{
 
-    glob( 'vars', 'pages', [
+    glob( 'arr', 'pages', [
       //Load these pages
       {
         id : 'dashboard',
@@ -56,7 +62,10 @@
         label : 'Manage Tables'
       }
     ]); // pages
-    navMenu( _glob.vars.pages );
+    globArr();
+    navMenu( _glob.arr.pages );
+    pageHashLoad();
+    window.onhashchange = pageHashLoad;
 
   });
 })();

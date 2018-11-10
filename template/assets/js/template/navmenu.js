@@ -8,23 +8,14 @@ function navMenu ( items ){
   navMenu_ul = document.createElement( 'ul' );
 
   for( let item of items ){
-
     let navMenu_li = navItm( item );
 
     if( item.items ){ // subitems
-
       let navMenu_ul_sub = document.createElement( 'ul' );
-
-      for( let subitem of item.items ){
-
-        navMenu_ul_sub.appendChild( navItm( subitem ) );
-
-      }
+      for( let subitem of item.items ) navMenu_ul_sub.appendChild( navItm( subitem ) );
       navMenu_li.appendChild( navMenu_ul_sub );
-
     }
     navMenu_ul.appendChild( navMenu_li );
-
   }
   navMenu.appendChild( navMenu_ul );
 }
@@ -35,21 +26,21 @@ function navItm( item ){
 
   navItm_a.innerHTML = item.label;
   navItm_a.setAttribute( 'id', item.id );
-  navItm_a.setAttribute( 'href', `${item.id}.html` );
+  navItm_a.setAttribute( 'href', `#${item.id}` ); /*
   navItm_a.addEventListener( 'click', ( event ) => {
-    navClickEvent( event )
-  });
+    //navClickEvent( event )
+  }); */
 
   navItm_li.appendChild( navItm_a );
   return navItm_li;
 }
-
+/*
 function navClickEvent( event ){
-  event.preventDefault();
+  //event.preventDefault();
   pageLoader( event.target );
-  navActiveItm( event.target );
+  navActiveItm( event.target.href );
 }
-
+*/
 function navActiveItm( target ){
   /*let navLinks = document.querySelectorAll( 'nav#primary ul li a');
   for( let navLink of navLinks ){
@@ -59,6 +50,6 @@ function navActiveItm( target ){
   }
   let targetClass = target.getAttribute( 'class' );
   target.setAttribute( 'class', `${targetClass} active`) */
-  $( 'nav#primary ul li a' ).removeClass( 'active' );
-  $( target ).addClass( 'active' );
+  $( 'nav a' ).removeClass( 'active' );
+  $( `nav a[href="#${target}"]` ).addClass( 'active' );
 }

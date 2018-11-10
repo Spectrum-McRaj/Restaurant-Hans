@@ -13,7 +13,8 @@
 
 class Glob {
   constructor() {
-    this.vars = {};
+    this.var = {};
+    this.arr = {};
     this.func = {};
     this.obj = {};
 
@@ -30,8 +31,11 @@ function glob( element, key, val ){
       glob[ key ] = val;
       _glob[ element ] = glob;
     } else{
+      try{
+        return _glob[ element ][ key ];
+      }catch( error ){
 
-      return _glob[ element ][ key ];
+      }
     }
   }
   //console.log( glob );

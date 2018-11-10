@@ -3,6 +3,20 @@
 * assets/js/helpers/utils.js
 */
 
+
+// Bootstrap Alert
+function bsAlert( target, type, icon, msg ){
+  let info_alert_id = getRandomInt( 1000, 9999 );
+  let info_alert = $( '<div></div>' ).addClass( 'alert alert-' + type) .attr( 'role', 'alert' ).attr( 'id', info_alert_id );
+  info_alert.html( `<i class="fas fa-${icon}"></i> ${msg}` );
+  $( target ).prepend( info_alert );
+  setTimeout( () => {
+    info_alert.fadeOut();
+    setTimeout( () => { $( '#' + info_alert_id ).remove() } ,1000 );
+  }, 5000 );
+
+}
+
 function getRandomInt(min, max) { // random nummer tussen min en max
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
@@ -31,30 +45,7 @@ function data( element, name, value ) { // data-[name] attribute
     }
 }
 
-function contains( query ) {
-  // contains.call( array, query )
-    let findNaN = query !== query;
-    let indexOf;
 
-    if( !findNaN && typeof Array.prototype.indexOf === 'function' ) {
-        indexOf = Array.prototype.indexOf;
-    } else {
-        indexOf = (query) => {
-            let i = -1, index = -1;
-
-            for( i = 0; i < this.length; i++ ) {
-                let item = this[i];
-
-                if( ( findNaN && item !== item ) || item === query ) {
-                    index = i;
-                    break;
-                }
-            }
-            return index;
-        };
-    }
-    return indexOf.call( this, needle ) > -1;
-}
 
 
 /*async */function load( url) {
