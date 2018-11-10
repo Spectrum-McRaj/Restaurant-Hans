@@ -27,6 +27,7 @@ function pageFunction( page ){
     page = page.split( '/' )
     functionPath = `${page[0]}/${page[1]}`
     args = page[2]
+    console.log( args )
   }else{
     functionPath = page
   }

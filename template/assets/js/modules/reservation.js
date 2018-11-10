@@ -20,11 +20,12 @@ function getReservation( id ){
 function overviewReservations(){
   navActiveItm( 'reservations/overview' );
   $( 'nav a#reservations').addClass( 'active' );
+  let nav_tab_active = document.querySelector( '.nav-link.active' );
+  nav_tab_active.innerText = `Overview`
   let arrayReservation = _glob.arr.reservations;
   let overview_fields = [
-
+    { label : 'Date/Time', field : 'timestamp' },
     { label : 'Guest', field : 'guest' },
-    { label : 'Time', field : 'timestamp' },
     { label : 'Persons', field : 'persons' },
     { label : 'Table', field : 'table' },
     { label : '', field : 'options' },
@@ -38,6 +39,11 @@ function overviewReservations(){
   table.setAttribute( 'class','table' )
   for( let field of overview_fields ){
     let table_th = document.createElement( 'th' );
+    // TODO : fix this in stylesheet
+    if( field.field === 'timestamp' || field.field === 'options' ) table_th.setAttribute( 'style', 'width:225px;' )
+    if( field.field === 'table' || field.field === 'persons' ) table_th.setAttribute( 'style', 'width:50px;' )
+    if( field.field === 'guest' ) table_th.setAttribute( 'style', 'width:325px;' )
+
     table_th.innerText = field.label;
     table_tr.appendChild( table_th );
   }
@@ -80,6 +86,8 @@ function overviewReservations(){
       }
 
       table_tr.appendChild( table_td );
+      // TODO : fix (row height jump by hover) in stylesheet
+      table_tr.setAttribute( 'style', 'height:56px;')
     }
 
     table_tbody.appendChild( table_tr )
@@ -92,7 +100,7 @@ function overviewReservations(){
 
 function addReservation(){
   let arrayReservation = _glob.arr.reservations;
-
+  navActiveItm( 'reservations/add' );
   let output = document.querySelector( '#page_output' ), // element for ouput in UI
   add_form = document.createElement( 'form' ), // form element which is added
   reservations = new Reservation, // class instance
@@ -115,23 +123,26 @@ function addReservation(){
       // SUGGESTION : calls something like selectTable( persons );
       //  which returns a array of selected available table(s);
 
-      let add_form_field = document.createElement( 'input' );
+      let add_form_field = document.createElement( 'input' ),
+      select_table_rand = tableReservation();
       add_form_field.setAttribute( 'type', 'hidden' )
       add_form_field.setAttribute( 'id', 'table' )
-      let reservations_tables = [], // array for current reserved tables
-      select_table_max = 35, // asume we have 35 tables
-      select_table_rand = getRandomInt(0,select_table_max); // pick  a random table
-      for( let item of arrayReservation ){ // current reserved tables
-        reservations_tables.push( item.table )
-      }
-      // check if picked table is reserved, if so pick another one
-      while( !reservations_tables.includes( select_table_rand ) ){
-        select_table_rand = getRandomInt(0,select_table_max);
-      }
+
       add_form_field.value = select_table_rand;
       add_form.appendChild( add_form_field );
+      let add_form_field_table_label = document.createElement( 'div' ),
+      add_form_field_table_val = document.createElement( 'div' ),
+      add_form_row = document.createElement( 'div' );
+      add_form_row.setAttribute( 'class','row' );
 
 
+      add_form_field_table_label.setAttribute( 'class', 'col-sm-2' );
+      add_form_field_table_label.innerText = 'Tafel'
+      add_form_field_table_val.setAttribute( 'class', 'col-sm-10' );
+      add_form_field_table_val.innerText = select_table_rand;
+      add_form_row.appendChild(add_form_field_table_label );
+      add_form_row.appendChild(add_form_field_table_val );
+      add_form.appendChild( add_form_row );
 
     }else{
       let add_form_field = document.createElement( 'input' ),
@@ -163,10 +174,14 @@ function addReservation(){
 
   }
   // submit button
-  let button_submit = document.createElement( 'button' )
+  let button_submit = document.createElement( 'button' ),
+  add_form_row = document.createElement( 'div' );
+  add_form_row.setAttribute( 'class','row' );
+  add_form_row.setAttribute( 'style','padding:10px;' );
   button_submit.setAttribute( 'class', 'btn ')
-  button_submit.innerText = 'Add Reservation'
-  add_form.appendChild( button_submit )
+  button_submit.innerText = 'Add Reservation';
+  add_form_row.appendChild( button_submit )
+  add_form.appendChild( add_form_row )
 
   output.innerHTML  = ''; // clear output
   output.appendChild( add_form_header );
@@ -208,7 +223,7 @@ function deleteReservation(id){
   let output = document.getElementById( 'page_output' );
   let container_confirm = document.createElement( 'div' );
   let nav_tab_active = document.querySelector( '.nav-link.active' );
-  nav_tab_active.innerText = `Delete Reservation`
+  if (nav_tab_active) nav_tab_active.innerText = `Delete Reservation`
   container_confirm.setAttribute( 'style', 'padding:25px')
   //header
   let header_confirm = document.createElement('h3');
@@ -249,7 +264,7 @@ function deleteReservation(id){
     _glob.arr.reservations = arrayReservation;
     overviewReservations();
     nav_tab_active.innerText = 'Overview'
-    bsAlert( '#page_output', 'primary', '', `Reservation of guest <b>${reservation_data.guest}</b> has been deleted` )
+    bsAlert( '#page_output', 'primary', '', `Reservation of Guest <b>${reservation_data.guest}</b> at ${reservation_data.timestamp} has been deleted` )
   });
   container_confirm.appendChild( button_confirm );
 
@@ -266,4 +281,18 @@ function deleteReservation(id){
   output.innerHTML = '';
   output.appendChild( container_confirm );
 
+}
+function tableReservation(){
+  let reservations_tables = [], // array for current reserved tables
+  tables_amount = _glob.arr.tables.length,
+  select_table_rand = getRandomInt( 1,tables_amount ), // pick  a random table
+  arrayReservation = _glob.arr.reservations;
+  for( let item of arrayReservation ){ // current reserved tables
+    reservations_tables.push( item.table )
+  }
+  // check if picked table is reserved, if so pick another random one...
+  while( reservations_tables.includes( select_table_rand ) ){
+    select_table_rand = getRandomInt( 1,tables_amount );
+  }
+  return select_table_rand;
 }
