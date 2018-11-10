@@ -23,7 +23,7 @@ function generate_invoice(process_reservation){
       output +  "<td align=right>"+dish.price+"</td></tr>"; // TODO: Make sure this is in a xxxx.yy format
       total  += dish.price;
     }
-    calcVAT  = total * (VAT/100);
+    calcVAT  = total * (config.VAT/100);
     output   += "<tr><td></td><td><hr></td></tr>";
     output   += `<tr><td align=right>Total excl. VAT:</td><td>${total}</td></tr>`;
     output   += `<tr><td align=right>VAT ${config.VAT}%:</td><td>${calcVAT}</td></tr>`;
