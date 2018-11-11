@@ -17,7 +17,7 @@ class Glob {
     this.arr = {};
     this.func = {};
     this.obj = {};
-
+    this.module = {};
     return this
   }
 }

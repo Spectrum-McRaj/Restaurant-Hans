@@ -1,8 +1,14 @@
 'use strict'
 /*
 * assets/js/modules/reservation.js
-* TODO : addReservation() - table selection
+* TODO : addReservation() - table selection / date/time input & validation
+*        https://github.com/Spectrum-McRaj/Restaurant-Hans/issues/8
+*        tableReservation()
 *        updateReservation() - build form
+*                            - populate with data from array
+*                            - pointer via location.hash?
+*       deleteReservation()  - ''
+* decrease amount of code with helpers/tools
 */
 
 function mainReservations(){
@@ -19,9 +25,10 @@ function getReservation( id ){
 
 function overviewReservations(){
   navActiveItm( 'reservations/overview' );
-  $( 'nav a#reservations').addClass( 'active' );
+  $( 'nav#primary a#reservations').addClass( 'active' );
   let nav_tab_active = document.querySelector( '.nav-link.active' );
-  nav_tab_active.innerText = `Overview`
+  nav_tab_active.innerText = `Overview`;
+
   let arrayReservation = _glob.arr.reservations;
   let overview_fields = [
     { label : 'Date/Time', field : 'timestamp' },
@@ -36,13 +43,12 @@ function overviewReservations(){
   table_thead = document.createElement( 'thead' ),
   table_tr = document.createElement( 'tr' ),
   output = document.getElementById( 'page_output' );
-  table.setAttribute( 'class','table' )
+  table.setAttribute( 'class','table table-hover' )
   for( let field of overview_fields ){
     let table_th = document.createElement( 'th' );
-    // TODO : fix this in stylesheet
-    if( field.field === 'timestamp' || field.field === 'options' ) table_th.setAttribute( 'style', 'width:225px;' )
+    // TODO : fix (col width jump at row hover) in stylesheet
+    if( field.field === 'timestamp' || field.field === 'options' || field.field === 'guest'  ) table_th.setAttribute( 'style', 'width:225px;' )
     if( field.field === 'table' || field.field === 'persons' ) table_th.setAttribute( 'style', 'width:50px;' )
-    if( field.field === 'guest' ) table_th.setAttribute( 'style', 'width:325px;' )
 
     table_th.innerText = field.label;
     table_tr.appendChild( table_th );
@@ -86,7 +92,7 @@ function overviewReservations(){
       }
 
       table_tr.appendChild( table_td );
-      // TODO : fix (row height jump by hover) in stylesheet
+      // TODO : fix (row height jump at hover) in stylesheet
       table_tr.setAttribute( 'style', 'height:56px;')
     }
 
@@ -116,7 +122,7 @@ function addReservation(){
   let valid_date = false;
   for( let field of add_form_fields ){
 
-    if ( field.id === 'table' ) { // select table(s) for this reservation
+    if ( field.id === 'table' ) { // TODO : select table(s) for this reservation
   // ---------------------------------------------------------------------------
       // we want at this point to select & combine tables
       // (if the amount of persons requires this)
@@ -124,7 +130,7 @@ function addReservation(){
       //  which returns a array of selected available table(s);
 
       let add_form_field = document.createElement( 'input' ),
-      select_table_rand = tableReservation();
+      select_table_rand = tableReservation(); // returns random available table
       add_form_field.setAttribute( 'type', 'hidden' )
       add_form_field.setAttribute( 'id', 'table' )
 
@@ -144,6 +150,9 @@ function addReservation(){
       add_form_row.appendChild(add_form_field_table_val );
       add_form.appendChild( add_form_row );
 
+    /*}else if ( field.id === 'timestamp' ) {
+      TODO : add date / time field which are submitted as timestamp
+    */
     }else{
       let add_form_field = document.createElement( 'input' ),
       add_form_field_col = document.createElement( 'div' ),
@@ -164,15 +173,15 @@ function addReservation(){
       add_form_row.appendChild( add_form_field_col );
       add_form.appendChild( add_form_row );
 
-      if( field.id === 'date' ) add_form_field.addEventListener( 'keyup', (event) => {
-          // check if date is after today
-        });
+
 
     }
 
-
-
   }
+
+  // date datepicker
+
+
   // submit button
   let button_submit = document.createElement( 'button' ),
   add_form_row = document.createElement( 'div' );
@@ -186,28 +195,77 @@ function addReservation(){
   output.innerHTML  = ''; // clear output
   output.appendChild( add_form_header );
   output.appendChild( add_form ); // append form to output
+
+  $('input#timestamp').datepicker( { format:'mm/dd/yyyy' }).on( 'change' , (event) =>{
+    // check date, if valid; valid_date = true
+    let date = new Date(event.target.value);
+    var today = new Date();
+    if ((date.getTime()>=today.getTime())){
+      valid_date = true;
+      $('input#timestamp').removeClass('is-invalid').addClass('is-valid');
+      $('#date-invalid').remove();
+    }else{
+      $('input#timestamp').removeClass('is-valid').addClass('is-invalid').after('<div class="invalid-feedback" id="date-invalid">Please provide a valid date for this reservation</div>');
+      valid_date = false;
+    }
+  });
+
   // form submit
   add_form.addEventListener( 'submit', (event) => {
-    event.preventDefault()
-    if( valid_date ){
-      let add_data = new FormData( event.target ); // get data from form
+    event.preventDefault() // prevent form submit
+    //let add_data = new FormData( add_form ); // get data from form
+    let _guest = document.getElementById('guest').value;
+    let _persons = document.getElementById('persons').value;
+    let _timestamp =  document.getElementById('timestamp').value;
+    let _table =  document.getElementById('table').value;
+    let add_data = {
+      guest : _guest,
+      persons : _persons,
+      timestamp : _timestamp,
+      table : _table
+    }
+    console.log(add_data)
+    let valid_data = true;
+    if( ! valid_date ){ //invalid date
+      bsAlert( '#page_output','warning','','Invalid date' )
+      $('input#timestamp').addClass( 'is-invalid' ).after('<div class="invalid-feedback" id="date-invalid">Please provide a valid date for this reservation</div>');
+      valid_data = false;
+    }
+    if (!(typeof (persons/1) === 'number')) {
+        bsAlert( '#page_output','warning','','Persons must be a number' )
+          $('input#persons').addClass( 'is-invalid' ).after('<div class="invalid-feedback" id="persons-invalid">Please provide a number for persons</div>').on( 'keyup', (event) => {
+            console.log( event.target.value/1)
+            if( !isNaN(event.target.value) && event.target.value !== '' ){
+              $('input#persons').removeClass('is-invalid').addClass( 'is-valid' );
+              $('#persons-invalid').remove();
+              valid_data = true;
+            }
+          });
+          valid_data = false;
+
+
+    }
+    if(valid_data){ // valid data; save to array
+
+
+
       add_data[ 'id' ] = getRandomInt(1000,9999); // generate & assign random int as id
       arrayReservation.push( add_data ); // save reservation to array
       _glob.arr.reservations = arrayReservation;
       let reservation_add = new Reservation( add_data );
-      //new Guest()
-      bsAlert( '#page_output','primary','',`Reservation for <b>${reservation_add.guest}</b> has been saved` )
-    }else{
-      bsAlert( '#page_output','warning','','Invalid date' )
+      //
+      location.hash = '#reservations'
+      bsAlert( '.page-content','primary','',`Reservation for <b>${add_data.guest}</b> has been saved` )
+      //overviewReservations();
     }
 
   });
-  $( 'nav a#reservations').addClass( 'active' );
+  $( 'nav#primary a#reservations').addClass( 'active' );
 }
 
 
 
-function updateReservation(){
+function updateReservation( id ){
 
   let output = document.querySelector( '#page_output' ), // element for ouput in UI
   update_form = document.createElement( 'form' );
@@ -216,8 +274,8 @@ function updateReservation(){
   });
 }
 
-function deleteReservation(id){
-
+function deleteReservation( id ){
+  //location.hash = `#reservations/delete/${id}`
   let arrayReservation = _glob.arr.reservations;
   let reservation_data = getReservation( id );
   let output = document.getElementById( 'page_output' );
@@ -282,17 +340,31 @@ function deleteReservation(id){
   output.appendChild( container_confirm );
 
 }
-function tableReservation(){
+function tableReservation( persons ){
   let reservations_tables = [], // array for current reserved tables
   tables_amount = _glob.arr.tables.length,
   select_table_rand = getRandomInt( 1,tables_amount ), // pick  a random table
+  // TODO : check if selected table can host the amount of persons (check seats)
   arrayReservation = _glob.arr.reservations;
   for( let item of arrayReservation ){ // current reserved tables
     reservations_tables.push( item.table )
   }
+
   // check if picked table is reserved, if so pick another random one...
   while( reservations_tables.includes( select_table_rand ) ){
     select_table_rand = getRandomInt( 1,tables_amount );
   }
   return select_table_rand;
+}
+
+function dateDiffDays( start, end ) {
+ return Math.ceil( Math.abs( ( new Date( start ) ).getTime() - ( new Date( end ) ).getTime()  ) / (1000 * 3600 * 24) ); // aantal dagen
+}
+
+function $date( date ){
+  let d = date === undefined ? new Date() : new Date( date );
+  let dd = d.getDate();
+  let mm = d.getMonth()+1;
+  let yyyy = d.getFullYear();
+  return `${mm}/${dd}/${yyyy}`;
 }
