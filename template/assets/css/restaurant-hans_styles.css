@@ -183,3 +183,17 @@ main#page {
   #page_output button.btn{
 
   }
+/* DataTable */
+  #page_output table.dataTable thead .sorting:after {
+    opacity: 0.2;
+    content: "" !important;
+    /* sort */
+  }
+  #page_output table.dataTable thead .sorting_asc:after {
+    content: "" !important;
+    /* sort-by-attributes */
+  }
+  #page_output table.dataTable thead .sorting_desc:after {
+    content: "" !important;
+    /* sort-by-attributes-alt */
+  }

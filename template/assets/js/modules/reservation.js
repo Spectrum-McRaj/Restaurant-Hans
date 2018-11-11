@@ -60,7 +60,7 @@ function overviewReservations(){
   let table_tbody = document.createElement( 'tbody' );
   for( let item of arrayReservation ) {
     table_tr = document.createElement( 'tr' );
-
+    // options buttons
     let button_edit = document.createElement( 'button' );
     button_edit.setAttribute( 'class', 'btn btn-sm' )
     button_edit.innerHTML = '<i class="far fa-edit"></i> Edit';
@@ -79,6 +79,8 @@ function overviewReservations(){
     button_group.setAttribute( 'class','btn-group btn-group-sm' );
     button_group.appendChild( button_edit );
     button_group.appendChild( button_delete );
+
+
     for( let field of overview_fields ){
       let table_td = document.createElement( 'td' );
       if ( field.field === 'options' ){ // edit/delete buttons
@@ -102,6 +104,10 @@ function overviewReservations(){
   table.appendChild( table_tbody )
   output.innerHTML = '';
   output.appendChild( table );
+  $( 'table' ).DataTable();
+  if( arrayReservation.length < 11 ){
+    $('ul.pagination').hide();
+  }
 }
 
 function addReservation(){
@@ -205,19 +211,35 @@ function addReservation(){
       $('input#timestamp').removeClass('is-invalid').addClass('is-valid');
       $('#date-invalid').remove();
     }else{
+      $('#date-invalid').remove();
       $('input#timestamp').removeClass('is-valid').addClass('is-invalid').after('<div class="invalid-feedback" id="date-invalid">Please provide a valid date for this reservation</div>');
       valid_date = false;
+    }
+  });
+
+  $('input#persons').on( 'keyup', ( event ) => {
+    // check if persons is a number
+    if( !(isNaN( event.target.value )) ){
+      $( 'input#persons' ).removeClass( 'is-invalid' ).addClass( 'is-valid' );
+      $( '#persons-invalid' ).remove();
+      valid_data = true;
+    }else{
+      $( '#persons-invalid' ).remove();
+      $( 'input#persons' ).removeClass( 'is-valid' ).addClass( 'is-invalid' ).after( '<div class="invalid-feedback" id="persons-invalid">Please provide a number for persons</div>' );
+      valid_data = false;
     }
   });
 
   // form submit
   add_form.addEventListener( 'submit', (event) => {
     event.preventDefault() // prevent form submit
-    //let add_data = new FormData( add_form ); // get data from form
+
     let _guest = document.getElementById('guest').value;
     let _persons = document.getElementById('persons').value;
     let _timestamp =  document.getElementById('timestamp').value;
     let _table =  document.getElementById('table').value;
+    //let add_data = new FormData( add_form ); // get data from form
+    // TODO : find out why FormData( add_form ) returns empty?
     let add_data = {
       guest : _guest,
       persons : _persons,
@@ -228,20 +250,13 @@ function addReservation(){
     let valid_data = true;
     if( ! valid_date ){ //invalid date
       bsAlert( '#page_output','warning','','Invalid date' )
-      $('input#timestamp').addClass( 'is-invalid' ).after('<div class="invalid-feedback" id="date-invalid">Please provide a valid date for this reservation</div>');
+
       valid_data = false;
     }
-    if (!(typeof (persons/1) === 'number')) {
+    if ( (isNaN(_persons/1)) ) {
         bsAlert( '#page_output','warning','','Persons must be a number' )
-          $('input#persons').addClass( 'is-invalid' ).after('<div class="invalid-feedback" id="persons-invalid">Please provide a number for persons</div>').on( 'keyup', (event) => {
-            console.log( event.target.value/1)
-            if( !isNaN(event.target.value) && event.target.value !== '' ){
-              $('input#persons').removeClass('is-invalid').addClass( 'is-valid' );
-              $('#persons-invalid').remove();
-              valid_data = true;
-            }
-          });
-          valid_data = false;
+        valid_data = false;
+
 
 
     }
@@ -250,7 +265,7 @@ function addReservation(){
 
 
       add_data[ 'id' ] = getRandomInt(1000,9999); // generate & assign random int as id
-      arrayReservation.push( add_data ); // save reservation to array
+      arrayReservation.unshift( add_data ); // save reservation to array
       _glob.arr.reservations = arrayReservation;
       let reservation_add = new Reservation( add_data );
       //
@@ -276,13 +291,13 @@ function updateReservation( id ){
 
 function deleteReservation( id ){
   //location.hash = `#reservations/delete/${id}`
-  let arrayReservation = _glob.arr.reservations;
-  let reservation_data = getReservation( id );
-  let output = document.getElementById( 'page_output' );
-  let container_confirm = document.createElement( 'div' );
-  let nav_tab_active = document.querySelector( '.nav-link.active' );
-  if (nav_tab_active) nav_tab_active.innerText = `Delete Reservation`
-  container_confirm.setAttribute( 'style', 'padding:25px')
+  let arrayReservation = _glob.arr.reservations; // get array data
+  let reservation_data = getReservation( id ); // get current reservation data
+  let output = document.getElementById( 'page_output' ); // element for output in UI
+  let container_confirm = document.createElement( 'div' ); // element for confirmation in UI
+  let nav_tab_active = document.querySelector( '.nav-link.active' ); // current active tab
+  if (nav_tab_active) nav_tab_active.innerText = `Delete Reservation` // set text of current tab
+  container_confirm.setAttribute( 'style', 'padding:25px') // TODO : fix this in stylesheet
   //header
   let header_confirm = document.createElement('h3');
   header_confirm.innerText = 'Confirm Delete Reservation';
@@ -313,15 +328,16 @@ function deleteReservation( id ){
     } */
     let tmp_arr = [];
     for( let item of arrayReservation ){
-      if( item.id !== id ){
+      if( item.id !== id ){ // remove by exclusion
         tmp_arr.push( item )
       }
 
     }
     arrayReservation = tmp_arr;
-    _glob.arr.reservations = arrayReservation;
+    _glob.arr.reservations = arrayReservation; // save data to array
     overviewReservations();
     nav_tab_active.innerText = 'Overview'
+    // alert user something has happened
     bsAlert( '#page_output', 'primary', '', `Reservation of Guest <b>${reservation_data.guest}</b> at ${reservation_data.timestamp} has been deleted` )
   });
   container_confirm.appendChild( button_confirm );
@@ -355,16 +371,4 @@ function tableReservation( persons ){
     select_table_rand = getRandomInt( 1,tables_amount );
   }
   return select_table_rand;
-}
-
-function dateDiffDays( start, end ) {
- return Math.ceil( Math.abs( ( new Date( start ) ).getTime() - ( new Date( end ) ).getTime()  ) / (1000 * 3600 * 24) ); // aantal dagen
-}
-
-function $date( date ){
-  let d = date === undefined ? new Date() : new Date( date );
-  let dd = d.getDate();
-  let mm = d.getMonth()+1;
-  let yyyy = d.getFullYear();
-  return `${mm}/${dd}/${yyyy}`;
 }
