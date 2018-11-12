@@ -88,7 +88,9 @@ function overviewReservations(){
         table_td.appendChild( button_group );
 
 
+      }else if (field.field === 'timestamp') {
 
+        table_td.innerText = item[ field.field ]+' (over '+$.timeago(item[ field.field ]).replace(' ago','')+')';
       }else {
         table_td.innerText = item[ field.field ];
       }
@@ -104,6 +106,7 @@ function overviewReservations(){
   table.appendChild( table_tbody )
   output.innerHTML = '';
   output.appendChild( table );
+  $( '.timestamp' ).timeago();
   $( 'table' ).DataTable();
   if( arrayReservation.length < 11 ){
     $('ul.pagination').hide();
@@ -125,15 +128,12 @@ function addReservation(){
     { id : 'persons', label : prop_label.persons },
     { id : 'table', label : prop_label.table }
   ]
-  let valid_date = false;
+  let valid_date = false,
+  valid_data = true;
   for( let field of add_form_fields ){
 
     if ( field.id === 'table' ) { // TODO : select table(s) for this reservation
-  // ---------------------------------------------------------------------------
-      // we want at this point to select & combine tables
-      // (if the amount of persons requires this)
-      // SUGGESTION : calls something like selectTable( persons );
-      //  which returns a array of selected available table(s);
+
 
       let add_form_field = document.createElement( 'input' ),
       select_table_rand = tableReservation(); // returns random available table
@@ -149,15 +149,16 @@ function addReservation(){
 
 
       add_form_field_table_label.setAttribute( 'class', 'col-sm-2' );
-      add_form_field_table_label.innerText = 'Tafel'
+      add_form_field_table_label.innerText = 'Table'
       add_form_field_table_val.setAttribute( 'class', 'col-sm-10' );
+      add_form_field_table_val.setAttribute( 'id', 'table_val' );
       add_form_field_table_val.innerText = select_table_rand;
       add_form_row.appendChild(add_form_field_table_label );
       add_form_row.appendChild(add_form_field_table_val );
       add_form.appendChild( add_form_row );
 
     /*}else if ( field.id === 'timestamp' ) {
-      TODO : add date / time field which are submitted as timestamp
+      TODO : add date / time field which are submitted together as timestamp
     */
     }else{
       let add_form_field = document.createElement( 'input' ),
@@ -185,9 +186,6 @@ function addReservation(){
 
   }
 
-  // date datepicker
-
-
   // submit button
   let button_submit = document.createElement( 'button' ),
   add_form_row = document.createElement( 'div' );
@@ -201,17 +199,18 @@ function addReservation(){
   output.innerHTML  = ''; // clear output
   output.appendChild( add_form_header );
   output.appendChild( add_form ); // append form to output
-
+  //let valid_data = true;
   $('input#timestamp').datepicker( { format:'mm/dd/yyyy' }).on( 'change' , (event) =>{
     // check date, if valid; valid_date = true
     let date = new Date(event.target.value);
     var today = new Date();
-    if ((date.getTime()>=today.getTime())){
+    if ((date.getTime()>=today.getTime())){ // TODO : date of today is invalid
       valid_date = true;
-      $('input#timestamp').removeClass('is-invalid').addClass('is-valid');
-      $('#date-invalid').remove();
+      $('#date-invalid,#date-valid').remove();
+      $('input#timestamp').removeClass('is-invalid').addClass('is-valid').after('<div class="valid-feedback" id="date-valid">over '+$.timeago(date).replace(' ago','')+'</div>');
+
     }else{
-      $('#date-invalid').remove();
+      $('#date-invalid,#date-valid').remove();
       $('input#timestamp').removeClass('is-valid').addClass('is-invalid').after('<div class="invalid-feedback" id="date-invalid">Please provide a valid date for this reservation</div>');
       valid_date = false;
     }
@@ -227,6 +226,15 @@ function addReservation(){
       $( '#persons-invalid' ).remove();
       $( 'input#persons' ).removeClass( 'is-valid' ).addClass( 'is-invalid' ).after( '<div class="invalid-feedback" id="persons-invalid">Please provide a number for persons</div>' );
       valid_data = false;
+    }
+    // TODO : we want to select a table with more seats or combine tables
+    // ---------------------------------------------------------------------------
+        // we want at this point to select & combine tables
+        // (if the amount of persons requires this)
+        // SUGGESTION : calls something like selectTable( persons );
+        //  which returns a array of selected available table(s);
+    if( valid_data ){
+
     }
   });
 
@@ -247,7 +255,7 @@ function addReservation(){
       table : _table
     }
     console.log(add_data)
-    let valid_data = true;
+
     if( ! valid_date ){ //invalid date
       bsAlert( '#page_output','warning','','Invalid date' )
 
@@ -281,12 +289,25 @@ function addReservation(){
 
 
 function updateReservation( id ){
-
+  let arrayReservation = _glob.arr.reservations;
+  navActiveItm( 'reservations/add' );
   let output = document.querySelector( '#page_output' ), // element for ouput in UI
   update_form = document.createElement( 'form' );
+  reservations = new Reservation, // class instance
+  prop_label = reservations.propertyLabels(), // call method of instance for labels input
+  update_form_header = document.createElement( 'h3' );
+  update_form_header.innerText = 'Edit Reservation';
+  let update_form_fields = [ // form fields & labels; update to add/remove fields
+    { id : 'guest', label : prop_label.guest },
+    { id : 'timestamp', label : prop_label.timestamp },
+    { id : 'persons', label : prop_label.persons },
+    { id : 'table', label : prop_label.table }
+  ]
   update_form.addEventListener( 'submit', (event) => {
     new Reservation()
   });
+  for( let field of add_form_fields ){
+  }
 }
 
 function deleteReservation( id ){
@@ -366,7 +387,7 @@ function tableReservation( persons ){
     reservations_tables.push( item.table )
   }
 
-  // check if picked table is reserved, if so pick another random one...
+  // if picked table is reserved, pick another random one...
   while( reservations_tables.includes( select_table_rand ) ){
     select_table_rand = getRandomInt( 1,tables_amount );
   }
