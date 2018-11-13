@@ -22,6 +22,16 @@ function getReservation( id ){
   }
 }
 
+function setReservation(reservation){
+  let id = reservation.id;
+  for(let i = 0; i < _glob.arr.reservations.length(); i++){
+    if( _glob.arr.reservations[i].id === id ){_glob.arr.reservations[i] = reservation;}
+  }
+}
+
+/* -----------------------------------------------------------------------------
+* add
+*/
 
 function overviewReservations(){
   navActiveItm( 'reservations/overview' );
@@ -112,7 +122,9 @@ function overviewReservations(){
     $('ul.pagination').hide();
   }
 }
-
+/* -----------------------------------------------------------------------------
+* add
+*/
 function addReservation(){
   let arrayReservation = _glob.arr.reservations;
   navActiveItm( 'reservations/add' );
@@ -158,8 +170,33 @@ function addReservation(){
       add_form.appendChild( add_form_row );
 
     /*}else if ( field.id === 'timestamp' ) {
-      TODO : add date / time field which are submitted together as timestamp
-    */
+    // TODO: let the CrEl magic happen!
+
+
+      let row =  new CrEl( add_form ).create('div')
+        .attr('class','row')
+
+      let label = new CrEl( row ).create('label')
+        .attr('for','')
+
+      let field_date = new CrEl( add_form ).create('input')
+        .attr('type', 'hidden')
+        .attr('id', 'date')
+        .attr('autocomplete', 'date');
+
+      let field_time = new CrEl( add_form )
+        .create('input')
+        .attr('type', 'hidden')
+        .attr('id', 'time')
+        .attr('autocomplete', 'date');
+
+      let
+
+
+      */
+
+
+
     }else{
       let add_form_field = document.createElement( 'input' ),
       add_form_field_col = document.createElement( 'div' ),
@@ -174,8 +211,9 @@ function addReservation(){
       add_form_row.appendChild( add_form_label );
       // input
       add_form_field.setAttribute( 'id', field.id );
+      add_form_field.setAttribute( 'autocomplete','off' );
       add_form_field.setAttribute( 'class', 'form-control');
-      add_form_field_col.setAttribute( 'class', 'col-sm-10' )
+      add_form_field_col.setAttribute( 'class', 'col-sm-10' );
       add_form_field_col.appendChild( add_form_field );
       add_form_row.appendChild( add_form_field_col );
       add_form.appendChild( add_form_row );
@@ -200,14 +238,29 @@ function addReservation(){
   output.appendChild( add_form_header );
   output.appendChild( add_form ); // append form to output
   //let valid_data = true;
-  $('input#timestamp').datepicker( { format:'mm/dd/yyyy' }).on( 'change' , (event) =>{
+
+  let timestamp =  document.querySelector( 'input#timestamp' )
+  //timestamp = new CrEl().act( timestamp, 'change', (event) =>{
+    //console.log(event.target.value)
+
+  $('input#timestamp').datepicker( { format:'yyyy-mm-dd', startDate: '0' }).on( 'change' , (event) =>{
     // check date, if valid; valid_date = true
-    let date = new Date(event.target.value);
-    var today = new Date();
+    let date = new Date(event.target.value),
+    today = new Date(),
+    ss = today.getSeconds(),
+    mM = today.getMinutes(),
+    hh = today.getHours(),
+    dd = today.getDate(),
+    mm = today.getMonth()+1,
+    yyyy = today.getFullYear();
+    today = new Date(`${yyyy}-${mm}-${dd}`);
+
+    console.log(date.getTime())
+    console.log(today.getTime())
     if ((date.getTime()>=today.getTime())){ // TODO : date of today is invalid
       valid_date = true;
       $('#date-invalid,#date-valid').remove();
-      $('input#timestamp').removeClass('is-invalid').addClass('is-valid').after('<div class="valid-feedback" id="date-valid">over '+$.timeago(date).replace(' ago','')+'</div>');
+      //$('input#timestamp').removeClass('is-invalid').addClass('is-valid').after('<div class="valid-feedback" id="date-valid">over '+$.timeago(date).replace(' ago','')+'</div>');
 
     }else{
       $('#date-invalid,#date-valid').remove();
@@ -286,7 +339,9 @@ function addReservation(){
   $( 'nav#primary a#reservations').addClass( 'active' );
 }
 
-
+/* -----------------------------------------------------------------------------
+* update
+*/
 
 function updateReservation( id ){
   let arrayReservation = _glob.arr.reservations;
@@ -344,6 +399,9 @@ function updateReservation( id ){
 
 
 }
+/* -----------------------------------------------------------------------------
+* delete
+*/
 
 function deleteReservation( id ){
   //location.hash = `#reservations/delete/${id}`
@@ -412,6 +470,10 @@ function deleteReservation( id ){
   output.appendChild( container_confirm );
 
 }
+/* -----------------------------------------------------------------------------
+* tables
+*/
+
 function tableReservation( persons ){
   let reservations_tables = [], // array for current reserved tables
   tables_amount = _glob.arr.tables.length,
@@ -427,4 +489,14 @@ function tableReservation( persons ){
     select_table_rand = getRandomInt( 1,tables_amount );
   }
   return select_table_rand;
+}
+
+/* -----------------------------------------------------------------------------
+* payments
+*/
+
+function hasPaidReservation(setBool, id){
+  let currentReservation = getReservation(id);
+  currentReservation._hasPaid = setBool;
+  setReservation(currentReservation);
 }
