@@ -10,7 +10,7 @@ class Reservation {
     this._table = table;
     this._arrangement = arrangement;
     this._comments = comments;
-
+    this._hasPaid = false;
   }
 
 }
