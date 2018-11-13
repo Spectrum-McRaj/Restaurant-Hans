@@ -306,8 +306,43 @@ function updateReservation( id ){
   update_form.addEventListener( 'submit', (event) => {
     new Reservation()
   });
-  for( let field of add_form_fields ){
+  let reservation = getReservation( id );
+  for( let field of update_form_fields ){
+
+    let update_form_field = document.createElement( 'input' ),
+    update_form_field_col = document.createElement( 'div' ),
+    update_form_label = document.createElement( 'label' ),
+    update_form_row = document.createElement( 'div' );
+    // form row
+    update_form_row.setAttribute( 'class','form-group row' );
+    // label
+    update_form_label.innerText = field.label;
+    update_form_label.setAttribute( 'class', 'col-sm-2 col-form-label' );
+    update_form_label.setAttribute( 'for', field.id );
+    update_form_row.appendChild( update_form_label );
+    // input
+    update_form_field.setAttribute( 'id', field.id );
+    update_form_field.setAttribute( 'class', 'form-control');
+    updtae_form_field.value = reservation[ field ];
+    update_form_field_col.setAttribute( 'class', 'col-sm-10' )
+    update_form_field_col.appendChild( update_form_field );
+    update_form_row.appendChild( update_form_field_col );
+    update_form.appendChild( update_form_row );
+
+
+
   }
+
+  let button_update = document.createElement( 'button' ),
+  add_form_row = document.createElement( 'div' );
+  add_form_row.setAttribute( 'class','row' );
+  add_form_row.setAttribute( 'style','padding:10px;' );
+  button_update.setAttribute( 'class', 'btn ')
+  button_update.innerText = 'Add Reservation';
+  add_form_row.appendChild( button_update );
+  add_form.appendChild( add_form_row );
+
+
 }
 
 function deleteReservation( id ){
@@ -338,7 +373,7 @@ function deleteReservation( id ){
 
   // confirm
   let button_confirm = document.createElement( 'button' );
-  button_confirm.setAttribute( 'class', 'btn' )
+  button_confirm.setAttribute( 'class', 'btn btn-dark' )
   button_confirm.setAttribute( 'style', 'margin-right:5px;')
   button_confirm.innerText = 'Delete';
   button_confirm.addEventListener( 'click', (event) => {

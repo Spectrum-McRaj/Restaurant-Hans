@@ -4,7 +4,7 @@
 */
 
 class Reservation {
-  constructor (id, timestamp, guest, persons, table, arrangement, comments) {
+  constructor (id, timestamp, guest, persons, table, arrangement, comments, hasPaid) {
     if( typeof id === 'object'){ // arguments als object
       let data = id;
       this._id = data.id;
@@ -14,6 +14,7 @@ class Reservation {
       this._table = data.table;
       this._arrangement = data.arrangement;
       this._comments = data.comments;
+      this._hasPaid = data.hasPaid;
     }else{
       this._id = id;
       this._timestamp = timestamp;
@@ -22,6 +23,7 @@ class Reservation {
       this._table = table;
       this._arrangement = arrangement;
       this._comments = comments;
+      this._hasPaid = hasPaid;
     }
 
   }
@@ -32,7 +34,8 @@ class Reservation {
       persons : 'Amount of persons',
       table : 'Table',
       arrangement : 'Arrangement',
-      comments : 'Notes'
+      comments : 'Notes',
+      hasPaid : 'Payment'
     }
   }
 }
