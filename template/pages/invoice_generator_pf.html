@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Invoice</title>
+  <meta charset="UTF-8">
+  <script src="../assets/js/modules/invoice_generator.js" language="JavaScript"></script>
+</head>
+<body>
+  <div style="float: right; width:200pt"><h1>MOLVENO</h1>Strada fantastica<br>citt&agrave; italiana</div>
+  <div id="invoice_content"></div>
+</body>
+</html>
+<!-- TODO: This will for now only show the invoice for the fake guest. Must later be set right when we got an actual database -->
+<script>document.getElementById("invoice_content").innerHTML=generate_invoice(reservation);</script>

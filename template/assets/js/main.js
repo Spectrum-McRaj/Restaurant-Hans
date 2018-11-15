@@ -33,6 +33,7 @@
     'modules/order',
     'modules/reservation',
     'modules/table',
+    'modules/invoice_generator',
 
   ]// requirejs
   ,()=>{
@@ -50,7 +51,7 @@
         label : 'Manage Guests'
       },{
         id : 'menu',
-        label : 'Manage Menu',
+        label : 'Manage Menu Items',
         items : [
           {
             id : 'ingredients',
@@ -60,6 +61,9 @@
       },{
         id : 'tables',
         label : 'Manage Tables'
+      },{
+        id : 'invoice_generator',
+        label : 'Invoices [TEMP]'
       }
     ]); // pages
     globArr();
