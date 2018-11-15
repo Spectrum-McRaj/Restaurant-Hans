@@ -95,13 +95,18 @@ nav#primary {
 main#page {
   min-width: 690px;
   margin-left: 240px; /* same width as nav#primary */
+  margin-top: 100px;
+  position: relative;
 }
   main#page .page-header {
     padding: 0;
     display: block;
+    width: 100%;
     height: 100px;
     background-color: rgb(134, 138, 142);
-    position: relative;
+    position: fixed;
+    top: 0;
+    z-index: 9999;
   }
     main#page .page-header > h2 {
       padding: 24px 96px 0 96px;
