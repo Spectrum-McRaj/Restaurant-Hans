@@ -17,6 +17,7 @@ function generate_invoice(process_reservation){
   // NOTE: In Italy the euro sign comes BEHIND the price!!!
   // The system could be enhanced to make it compatible with other countries
   // Or other currencies.
+  // Using , or . may also be an enhancement if this is customizable.
   var total=0;
   var calcVAT;
   var output="<center><table><caption><b>Invoice Molveno</b></caption>";
@@ -24,14 +25,14 @@ function generate_invoice(process_reservation){
   for (let item of process_reservation.items)   {
       let dish=dishes[item]
       output += `<tr><td>${dish.desc}</td>`;
-      output += "<td align=right>"+Number(dish.price).toFixed(2)+" &euro;</td></tr>"; // TODO: Make sure this is in a xxxx.yy format
+      output += "<td align=right>"+Number(dish.price).toFixed(2).replace(".",",")+" &euro;</td></tr>"; // TODO: Make sure this is in a xxxx.yy format
       total  += dish.price;
     }
     calcVAT  = total * (config.VAT/100);
     output   += "<tr><td></td><td><hr></td></tr>";
-    output   += `<tr><td align=right>Total excl. VAT:</td><td align=right>${Number(total).toFixed(2)} &euro;</td></tr>`;
-    output   += `<tr><td align=right>VAT ${config.VAT}%:</td><td align=right>${Number(calcVAT).toFixed(2)} &euro;</td></tr>`;
-    output   += `<tr><td align=right>Total incl. VAT:</td><td align=right>${Number(total+calcVAT).toFixed(2)} &euro;</td></tr>`;
+    output   += `<tr><td align=right>Total excl. VAT:</td><td align=right>${Number(total).toFixed(2).replace(".",",")} &euro;</td></tr>`;
+    output   += `<tr><td align=right>VAT ${config.VAT}%:</td><td align=right>${Number(calcVAT).toFixed(2).replace(".",",")} &euro;</td></tr>`;
+    output   += `<tr><td align=right>Total incl. VAT:</td><td align=right>${Number(total+calcVAT).toFixed(2).replace(".",",")} &euro;</td></tr>`;
     output   += "</table></center>";
     return output
 }
