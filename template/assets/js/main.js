@@ -51,7 +51,7 @@
         label : 'Manage Guests'
       },{
         id : 'menu',
-        label : 'Manage Menu',
+        label : 'Manage Menu Items',
         items : [
           {
             id : 'ingredients',
