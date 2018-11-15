@@ -7,7 +7,7 @@ let dishes = { 1:{desc:"Lobster with kaviar", price: 50.00}, 2: {desc:"Bordeaux 
 
 let reservation = {
      guest:"Dagobert Duck",
-     items:[4,1,2,3],
+     items:[4,1,2,2,3],
 }
 
 /* einde nep gegevens */
@@ -22,17 +22,23 @@ function generate_invoice(process_reservation){
   var calcVAT;
   var output="<center><table><caption><b>Invoice Molveno</b></caption>";
   output += `<tr><td colspan=2 align=right>Invoice for ${process_reservation.guest}`;
+  let mitems = {}
   for (let item of process_reservation.items)   {
-      let dish=dishes[item]
+      if (mitems[item]==undefined) mitems[item]=0;
+      //console.log(mitems);
+      mitems[item] = mitems[item] + 1;
+  }
+  for (let mitem in mitems){
+      let dish=dishes[mitem]
       output += `<tr><td>${dish.desc}</td>`;
-      output += "<td align=right>"+Number(dish.price).toFixed(2).replace(".",",")+" &euro;</td></tr>"; // TODO: Make sure this is in a xxxx.yy format
+      output += "<td align=right>"+Number(dish.price).toFixed(2).replace(".",",")+" &euro;</td><td align=right>x"+mitems[mitem]+"</td><td align=right>"+Number(dish.price*mitems[mitem]).toFixed(2).replace(".",",")+" &euro;</td></tr>"; // TODO: Make sure this is in a xxxx.yy format
       total  += dish.price;
     }
     calcVAT  = total * (config.VAT/100);
-    output   += "<tr><td></td><td><hr></td></tr>";
-    output   += `<tr><td align=right>Total excl. VAT:</td><td align=right>${Number(total).toFixed(2).replace(".",",")} &euro;</td></tr>`;
-    output   += `<tr><td align=right>VAT ${config.VAT}%:</td><td align=right>${Number(calcVAT).toFixed(2).replace(".",",")} &euro;</td></tr>`;
-    output   += `<tr><td align=right>Total incl. VAT:</td><td align=right>${Number(total+calcVAT).toFixed(2).replace(".",",")} &euro;</td></tr>`;
+    output   += "<tr><td colspan=3></td><td><hr></td></tr>";
+    output   += `<tr><td colspan=3 align=right>Total excl. VAT:</td><td align=right>${Number(total).toFixed(2).replace(".",",")} &euro;</td></tr>`;
+    output   += `<tr><td colspan=3 align=right>VAT ${config.VAT}%:</td><td align=right>${Number(calcVAT).toFixed(2).replace(".",",")} &euro;</td></tr>`;
+    output   += `<tr><td colspan=3 align=right>Total incl. VAT:</td><td align=right>${Number(total+calcVAT).toFixed(2).replace(".",",")} &euro;</td></tr>`;
     output   += "</table></center>";
     return output
 }
