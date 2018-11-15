@@ -100,7 +100,10 @@ function overviewReservations(){
 
       }else if (field.field === 'timestamp') {
 
-        table_td.innerText = item[ field.field ]+' (over '+$.timeago(item[ field.field ]).replace(' ago','')+')';
+        let date = new Date( item[ field.field ] ),
+         date_options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        table_td.innerText = date.toLocaleDateString( 'en-US', date_options )+', '+item[ field.field ].split('T')[1]+' (over '+$.timeago(item[ field.field ]).replace(' ago','')+')';
+
       }else {
         table_td.innerText = item[ field.field ];
       }
@@ -116,11 +119,10 @@ function overviewReservations(){
   table.appendChild( table_tbody )
   output.innerHTML = '';
   output.appendChild( table );
-  $( '.timestamp' ).timeago();
+
   $( 'table' ).DataTable();
-  if( arrayReservation.length < 11 ){
-    $('ul.pagination').hide();
-  }
+  if( arrayReservation.length < 11 ) $('ul.pagination').hide();
+
 }
 /* -----------------------------------------------------------------------------
 * add
@@ -170,30 +172,58 @@ function addReservation(){
       add_form.appendChild( add_form_row );
 
     /*}else if ( field.id === 'timestamp' ) {
-    // TODO: let the CrEl magic happen!
+    // TODO: let the new CrEl() magic happen!
+
+      let row,col,form_group,label,input
+      //row
+      row = document.createElement( 'div' )
+            row.setAttribute( 'class', 'row' );
+      //row =  new CrEl( add_form ).create('div')
+        //.attr('class','row');
+
+        // col label
+        col = new CrEl( row ).create('div')
+          .attr('class','col-sm-2 col-form-label');
+          // label
+          label = new CrEl( col ).create('label') // TODO: Uncaught TypeError: this.parent.appendChild is not a function (crEl.js:18)
+          .attr('for','date')
+          .inner('Date/Time');
+
+        // col date
+        col = new CrEl( row ).create('div')
+        .attr('class','col-sm-5 col-form-label');
+        // form-group date
+        form_group = new CrEl( col )
+          .attr('class','form group');
+          // label date
+          label = new CrEl( form_group ).create('label')
+            .attr('for','date')
+            .inner('Date');
+          // input date
+          input = new CrEl( form_group ).create('input')
+          .attr('type', 'hidden')
+          .attr('id', 'date')
+          .attr('placeholder','Date')
+          .attr('autocomplete', 'off');
 
 
-      let row =  new CrEl( add_form ).create('div')
-        .attr('class','row')
-
-      let label = new CrEl( row ).create('label')
-        .attr('for','')
-
-      let field_date = new CrEl( add_form ).create('input')
-        .attr('type', 'hidden')
-        .attr('id', 'date')
-        .attr('autocomplete', 'date');
-
-      let field_time = new CrEl( add_form )
-        .create('input')
-        .attr('type', 'hidden')
-        .attr('id', 'time')
-        .attr('autocomplete', 'date');
-
-      let
-
-
-      */
+        // col time
+        col = new CrEl( row ).create('div')
+        .attr('class','col-sm-5 col-form-label');
+        // form-group date
+        form_group = new CrEl( col )
+          .attr('class','form group');
+          // label date
+          label = new CrEl( form_group ).create('label')
+            .attr('for','time')
+            .inner('Time');
+          // input date
+          input = new CrEl( form_group ).create('input')
+          .attr('type', 'hidden')
+          .attr('id', 'time')
+          .attr('placeholder','Time')
+          .attr('autocomplete', 'off');
+          */
 
 
 
@@ -212,6 +242,9 @@ function addReservation(){
       // input
       add_form_field.setAttribute( 'id', field.id );
       add_form_field.setAttribute( 'autocomplete','off' );
+      if ( field.id === 'persons' ){
+        add_form_field.setAttribute( 'type','number' );
+      }
       add_form_field.setAttribute( 'class', 'form-control');
       add_form_field_col.setAttribute( 'class', 'col-sm-10' );
       add_form_field_col.appendChild( add_form_field );
@@ -243,7 +276,7 @@ function addReservation(){
   //timestamp = new CrEl().act( timestamp, 'change', (event) =>{
     //console.log(event.target.value)
 
-  $('input#timestamp').datepicker( { format:'yyyy-mm-dd', startDate: '0' }).on( 'change' , (event) =>{
+  $('input#timestamp').datepicker( { format:'mm/dd/yyyy', startDate: '0' }).on( 'change' , (event) =>{
     // check date, if valid; valid_date = true
     let date = new Date(event.target.value),
     today = new Date(),
@@ -253,31 +286,35 @@ function addReservation(){
     dd = today.getDate(),
     mm = today.getMonth()+1,
     yyyy = today.getFullYear();
-    today = new Date(`${yyyy}-${mm}-${dd}`);
+    today = new Date(`${dd}-${mm}-${yyyy}`);
 
-    console.log(date.getTime())
-    console.log(today.getTime())
-    if ((date.getTime()>=today.getTime())){ // TODO : date of today is invalid
+    //console.log(date.getTime())
+    //console.log(today.getTime())
+    //if ((date.getTime()>=today.getTime())){ // TODO : date of today is invalid
       valid_date = true;
-      $('#date-invalid,#date-valid').remove();
+      //$('#date-invalid,#date-valid').remove();
       //$('input#timestamp').removeClass('is-invalid').addClass('is-valid').after('<div class="valid-feedback" id="date-valid">over '+$.timeago(date).replace(' ago','')+'</div>');
-
-    }else{
-      $('#date-invalid,#date-valid').remove();
-      $('input#timestamp').removeClass('is-valid').addClass('is-invalid').after('<div class="invalid-feedback" id="date-invalid">Please provide a valid date for this reservation</div>');
-      valid_date = false;
-    }
+    //  let date = new Date( item[ field.field ] ),
+       let date_options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+      $('#date_feedback').remove();
+      $('input#timestamp').after(`<small class="muted feedback" id="date_feedback">${date.toLocaleDateString( 'en-US', date_options )}, over ${$.timeago(date).replace(' ago','')}</div>`);
+    //}else{
+  //    $('#date-invalid,#date-valid').remove();
+  //    $('input#timestamp').removeClass('is-valid').addClass('is-invalid').after('<div class="invalid-feedback" id="date-invalid">Please provide a valid date for this reservation</div>');
+    //  valid_date = false;
+    //}
   });
 
-  $('input#persons').on( 'keyup', ( event ) => {
+  $('input#persons').on( 'change', ( event ) => {
     // check if persons is a number
-    if( !(isNaN( event.target.value )) ){
-      $( 'input#persons' ).removeClass( 'is-invalid' ).addClass( 'is-valid' );
+    //if( ! (isNaN( event.target.value )) ){
+    if(   event.target.value > 0 ){
+      $( 'input#persons' ).removeClass( 'is-invalid' )//.addClass( 'is-valid' );
       $( '#persons-invalid' ).remove();
       valid_data = true;
     }else{
       $( '#persons-invalid' ).remove();
-      $( 'input#persons' ).removeClass( 'is-valid' ).addClass( 'is-invalid' ).after( '<div class="invalid-feedback" id="persons-invalid">Please provide a number for persons</div>' );
+      $( 'input#persons' ).removeClass( 'is-valid' ).addClass( 'is-invalid' ).after( '<div class="invalid-feedback" id="persons-invalid">Please provide a valid number for persons</div>' );
       valid_data = false;
     }
     // TODO : we want to select a table with more seats or combine tables
@@ -409,8 +446,21 @@ function deleteReservation( id ){
   let reservation_data = getReservation( id ); // get current reservation data
   let output = document.getElementById( 'page_output' ); // element for output in UI
   let container_confirm = document.createElement( 'div' ); // element for confirmation in UI
-  let nav_tab_active = document.querySelector( '.nav-link.active' ); // current active tab
-  if (nav_tab_active) nav_tab_active.innerText = `Delete Reservation` // set text of current tab
+  //let nav_tab_active = document.querySelector( '.nav-link.active' ); // current active tab
+  //if (nav_tab_active) nav_tab_active.innerText = `Delete Reservation` // set text of current tab
+  $('a.nav-link').removeClass('active');
+  $('#nav_tab_delete').remove();
+  let nav_tab_delete = document.createElement( 'li' );
+  nav_tab_delete.setAttribute( 'class', 'nav-item' );
+  nav_tab_delete.setAttribute( 'id', 'nav_tab_delete' );
+  nav_tab_delete.innerHTML = '<a href="#" class="nav-link active"><i class="fas fa-minus-circle"></i> Delete Reservation</a> ';
+
+  //nav_tab_delete.innerHTML = '<a href="#" class="nav-link active">Delete Reservation</a> <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>';
+  nav_tab_delete.addEventListener( 'click', (event) => {
+    deleteReservation( id );
+  });
+  let nav_tabs = document.querySelector( 'ul.nav-tabs');
+  nav_tabs.appendChild( nav_tab_delete );
   container_confirm.setAttribute( 'style', 'padding:25px') // TODO : fix this in stylesheet
   //header
   let header_confirm = document.createElement('h3');
@@ -450,9 +500,13 @@ function deleteReservation( id ){
     arrayReservation = tmp_arr;
     _glob.arr.reservations = arrayReservation; // save data to array
     overviewReservations();
-    nav_tab_active.innerText = 'Overview'
+    //location.hash = 'reservations'
+
+    nav_tabs.removeChild( nav_tab_delete );
+    //nav_tab_active.innerText = 'Overview'
     // alert user something has happened
     bsAlert( '#page_output', 'primary', '', `Reservation of Guest <b>${reservation_data.guest}</b> at ${reservation_data.timestamp} has been deleted` )
+
   });
   container_confirm.appendChild( button_confirm );
 
@@ -462,7 +516,11 @@ function deleteReservation( id ){
   button_cancel.innerText = 'Cancel';
   button_cancel.addEventListener( 'click', (event) => {
     overviewReservations();
-    nav_tab_active.innerText = 'Overview'
+    //location.hash = 'reservations'
+
+    nav_tabs.removeChild( nav_tab_delete );
+    //nav_tab_active.innerText = 'Overview'
+
   });
   container_confirm.appendChild( button_cancel );
 
@@ -473,6 +531,8 @@ function deleteReservation( id ){
 /* -----------------------------------------------------------------------------
 * tables
 */
+
+// TODO : table info from table module
 
 function tableReservation( persons ){
   let reservations_tables = [], // array for current reserved tables
