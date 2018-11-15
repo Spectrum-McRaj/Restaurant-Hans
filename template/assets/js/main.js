@@ -33,6 +33,7 @@
     'modules/order',
     'modules/reservation',
     'modules/table',
+    'modules/invoice_generator',
 
   ]// requirejs
   ,()=>{
@@ -60,6 +61,9 @@
       },{
         id : 'tables',
         label : 'Manage Tables'
+      },{
+        id : 'invoice_generator',
+        label : 'Invoices [TEMP]'
       }
     ]); // pages
     globArr();
