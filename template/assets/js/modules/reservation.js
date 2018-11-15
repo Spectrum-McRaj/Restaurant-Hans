@@ -23,9 +23,12 @@ function getReservation( id ){
 }
 
 function setReservation(reservation){
+  console.log("set res");
   let id = reservation.id;
-  for(let i = 0; i < _glob.arr.reservations.length(); i++){
-    if( _glob.arr.reservations[i].id === id ){_glob.arr.reservations[i] = reservation;}
+  for(let i = 0; i < _glob.arr.reservations.length; i++){
+
+    if( _glob.arr.reservations[i].id === id ){_glob.arr.reservations[i] = reservation;        console.log(_glob.arr.reservations[i].hasPaid + "");}
+
   }
 }
 
@@ -45,6 +48,7 @@ function overviewReservations(){
     { label : 'Guest', field : 'guest' },
     { label : 'Persons', field : 'persons' },
     { label : 'Table', field : 'table' },
+    { label : 'Paid', field : 'hasPaid'},
     { label : '', field : 'options' },
 
   ]
@@ -71,6 +75,14 @@ function overviewReservations(){
   for( let item of arrayReservation ) {
     table_tr = document.createElement( 'tr' );
     // options buttons
+
+    let button_paid = document.createElement( 'button' );
+    button_paid.setAttribute( 'class', 'btn btn-sm' )
+    button_paid.innerHTML = '<i class="far fa-edit"></i> paid';
+    button_paid.addEventListener( 'click', (event) => {
+      hasPaidReservation(!(item.hasPaid), item.id);
+    });
+
     let button_edit = document.createElement( 'button' );
     button_edit.setAttribute( 'class', 'btn btn-sm' )
     button_edit.innerHTML = '<i class="far fa-edit"></i> Edit';
@@ -87,6 +99,7 @@ function overviewReservations(){
 
     let button_group = document.createElement( 'div' );
     button_group.setAttribute( 'class','btn-group btn-group-sm' );
+    button_group.appendChild( button_paid );
     button_group.appendChild( button_edit );
     button_group.appendChild( button_delete );
 
@@ -363,10 +376,11 @@ function addReservation(){
 
 
       add_data[ 'id' ] = getRandomInt(1000,9999); // generate & assign random int as id
-      arrayReservation.unshift( add_data ); // save reservation to array
+       // save reservation to array
+       arrayReservation.unshift( add_data );
       _glob.arr.reservations = arrayReservation;
       let reservation_add = new Reservation( add_data );
-      //
+      //arrayReservation.unshift( reservation_add );
       location.hash = '#reservations'
       bsAlert( '.page-content','primary','',`Reservation for <b>${add_data.guest}</b> has been saved` )
       //overviewReservations();
@@ -556,7 +570,11 @@ function tableReservation( persons ){
 */
 
 function hasPaidReservation(setBool, id){
+  console.log("has paid " + setBool);
   let currentReservation = getReservation(id);
-  currentReservation._hasPaid = setBool;
+  console.log("1" + currentReservation.hasPaid);
+  currentReservation.hasPaid = setBool;
+  console.log("2" + currentReservation.hasPaid);
   setReservation(currentReservation);
+  overviewReservations();
 }

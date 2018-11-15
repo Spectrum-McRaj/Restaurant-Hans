@@ -6,7 +6,7 @@ function objectId(id,type){
 //let Consumable = require('./consumable');
 //let Ingredient = require('./ingredient');
 let consumables = [];
-
+let che = 0;
 function show(){
     document.getElementById("output").innerHTML = "menu item: </br>";
     console.log("in show()");
@@ -15,7 +15,10 @@ function show(){
     }
     console.log("for loop complete");
 }
-
+function testbla(){
+  che++;
+  console.log("checked" + che);
+}
 function newCons(){
   //console.log("ingredient: " + document.getElementById("inputDrop").value + "    amount: " + document.getElementById("amountIngr").value);
   let inputName = document.getElementById("name").value;
