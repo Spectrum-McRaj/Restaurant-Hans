@@ -355,7 +355,8 @@ function addReservation(){
       guest : _guest,
       persons : _persons,
       timestamp : _timestamp,
-      table : _table
+      table : _table,
+      hasPaid:false
     }
     console.log(add_data)
 
