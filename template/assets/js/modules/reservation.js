@@ -425,7 +425,7 @@ function updateReservation( id ){
     { id : 'timestamp', label : prop_label.timestamp },
     { id : 'persons', label : prop_label.persons },
     { id : 'table', label : prop_label.table },
-    { id : 'hasPaid', label : prop_label.hasPaid }
+    //{ id : 'hasPaid', label : prop_label.hasPaid }
   ]
   $('a.nav-link').removeClass('active');
   $('#nav_tab_edit').remove();
@@ -439,7 +439,7 @@ function updateReservation( id ){
   let nav_tabs = document.querySelector( 'ul.nav-tabs');
   nav_tabs.appendChild( nav_tab_update );
   let reservation = getReservation( id );
-  
+
   for( let field of update_form_fields ){
 
     let update_form_field = document.createElement( 'input' ),
@@ -506,7 +506,7 @@ function updateReservation( id ){
     _persons = document.getElementById('persons').value,
     _timestamp =  document.getElementById('timestamp').value,
     _table =  document.getElementById('table').value,
-    _hasPaid =  document.getElementById('hasPaid').value;
+    //_hasPaid =  document.getElementById('hasPaid').value;
 
 
     //let add_data = new FormData( add_form ); // get data from form
@@ -515,8 +515,8 @@ function updateReservation( id ){
       guest : _guest,
       persons : _persons,
       timestamp : _timestamp,
-      table : _table,
-      hasPaid : _hasPaid
+      table : _table
+      //hasPaid : _hasPaid
     }
     update_data[ 'id' ] = id;
     $('#nav_tab_edit').remove();

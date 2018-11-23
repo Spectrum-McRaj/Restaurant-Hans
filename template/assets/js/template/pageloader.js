@@ -45,6 +45,8 @@ function pageFunction( page ){
     case 'reservations/delete' :
       deleteReservation( args )
       break;
+    case 'invoices' :
+      mainInvoices();
     default:
       // mainHome()
   }
