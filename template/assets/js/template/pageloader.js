@@ -34,11 +34,9 @@ function pageFunction( page ){
 
   switch (functionPath) {
     case 'menu':
-      mainMenu();
-      break;
+
     case 'menu/add':
-      mainMenu();
-      break;
+
     case 'menu/overview':
       mainMenu();
       break;
