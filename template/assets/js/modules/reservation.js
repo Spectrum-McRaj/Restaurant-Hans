@@ -392,6 +392,7 @@ function addReservation(){
        arrayReservation.unshift( add_data );
       _glob.arr.reservations = arrayReservation;
       let reservation_add = new Reservation( add_data );
+      console.log(reservation_add);
       //arrayReservation.unshift( reservation_add );
       //location.hash = '#reservations'
       bsAlert( '.page-content','primary','',`Reservation for <b>${add_data.guest}</b> has been saved` )
@@ -400,7 +401,7 @@ function addReservation(){
 
   });
   $( 'nav#primary a#reservations').addClass( 'active' );
-}
+}//
 
 function hrsReservationSelect(){
   let select = document.createElement( 'select' );
@@ -438,7 +439,7 @@ function updateReservation( id ){
   let nav_tabs = document.querySelector( 'ul.nav-tabs');
   nav_tabs.appendChild( nav_tab_update );
   let reservation = getReservation( id );
-  console.log(reservation)
+  
   for( let field of update_form_fields ){
 
     let update_form_field = document.createElement( 'input' ),

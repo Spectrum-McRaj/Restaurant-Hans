@@ -95,7 +95,7 @@ nav#primary {
 main#page {
   min-width: 690px;
   margin-left: 240px; /* same width as nav#primary */
-  margin-top: 100px;
+  padding-top: 100px;
   position: relative;
 }
   main#page .page-header {
@@ -106,7 +106,7 @@ main#page {
     background-color: rgb(134, 138, 142);
     position: fixed;
     top: 0;
-    z-index: 9999;
+    z-index: 9;
   }
     main#page .page-header > h2 {
       padding: 24px 96px 0 96px;
@@ -124,6 +124,7 @@ main#page {
   position: absolute;
   bottom: 0;
   width: 100%;
+
 }
 
 #page-navigation ul {
