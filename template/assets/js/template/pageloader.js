@@ -33,17 +33,26 @@ function pageFunction( page ){
   }
 
   switch (functionPath) {
+    case 'menu':
+      mainMenu();
+      break;
+    case 'menu/add':
+      mainMenu();
+      break;
+    case 'menu/overview':
+      mainMenu();
+      break;
     case 'reservations':
-      mainReservations()
+      mainReservations();
       break;
     case 'reservations/overview' :
-      overviewReservations()
+      overviewReservations();
       break;
     case 'reservations/add' :
-      addReservation()
+      addReservation();
       break;
     case 'reservations/delete' :
-      deleteReservation( args )
+      deleteReservation( args );
       break;
     case 'invoices' :
       mainInvoices();
