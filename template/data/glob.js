@@ -1,8 +1,35 @@
 'use strict';
 /*
-* assets/js/helpers/glob_arr.js
+* data/glob.js
 */
+
+function globModule(){
+
+  let modules = [
+    { id : 'dashboard', label : 'Dashboard',
+      module : () => { // _glob.module.dashboard(); _glob.module[ 'dashboard' ]();
+      // mainDashboard
+      }
+    },
+    { id : 'reservations', label : 'Manage Reservations',
+      module : () => {
+        mainReservations();
+      }
+    },
+  ];
+  for( let _module in modules ){
+    glob( 'module', _module.id, _module.module );
+  }
+}
 function globArr(){
+
+
+  /*
+  let pages = [];
+  for( let _module in modules ){
+    glob( 'arr', 'pages', { id : _module.id, label : })
+  }
+  */
 
   glob( 'arr', 'pages', [
     //Load these pages
@@ -33,12 +60,14 @@ function globArr(){
     }
   ]); // pages
 
+
+
   glob( 'arr', 'reservations' , [
     //id, timestamp, guest, persons, table, arrangement, comments
     { id : 23456, timestamp : '2018-11-22T10:35:06', guest : 'Berry Edwards', persons : 5, table : 3, arrangement : 0, comments : '', hasPaid : false },
     { id : 23457, timestamp : '2018-11-23T18:35:05', guest : 'John Hope', persons : 5, table : 9, arrangement : 0, comments : '', hasPaid : false },
     { id : 23458, timestamp : '2018-11-24T15:35:04', guest : 'Pete Johnson', persons : 5, table : 26, arrangement : 0, comments : '', hasPaid : false },
-    { id : 23459, timestamp : '2018-11-25T12:32:03', guest : 'Tom Bender', persons : 5, table : 32, arrangement : 0, comments : '', hasPaid : false },
+    { id : 23459, timestamp : '2018-11-25T12:32:03', guest : 'Tom Bender', persons : 5, table : 30, arrangement : 0, comments : '', hasPaid : false },
     { id : 23450, timestamp : '2018-11-26T11:30:02', guest : 'Paul Davy', persons : 5, table : 2, arrangement : 0, comments : '', hasPaid : false }
   ] );
 

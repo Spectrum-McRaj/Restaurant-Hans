@@ -20,25 +20,33 @@ function loadMain( url, callback ){
   });
 }
 
-function pageFunction( page ){
+function pageFunction( page ){ // called in loadPage() / pageHashLoad()
   let functionPath,args
 
   if( page.indexOf( '/' ) > 0 ) {
     page = page.split( '/' )
     functionPath = `${page[0]}/${page[1]}`
-    args = page[2]
-    console.log( args )
+    args = page[2] // functionPath args (for view/delete) endpoint
+    // console.log( args )
   }else{
     functionPath = page
   }
-
+  // _glob.module [ functionPath ]( args ); // _glob.module in data/glob.js
   switch (functionPath) {
     case 'menu':
-
-    case 'menu/add':
-
-    case 'menu/overview':
       mainMenu();
+      break;
+    case 'menu/overview':
+      overviewMenu();
+      break;
+    case 'menu/view':
+      viewMenu( args );
+      break;
+    case 'menu/add':
+      addMenu();
+      break;
+    case 'menu/delete':
+      deleteMenu( args );
       break;
     case 'reservations':
       mainReservations();
@@ -59,7 +67,7 @@ function pageFunction( page ){
   }
 }
 
-function pageHashLoad() {
+function pageHashLoad() { // called in assets/main.js
   let hashLocation = location.hash,
   pageId = hashLocation.slice(1),
   pageUrl,

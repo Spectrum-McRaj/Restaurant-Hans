@@ -330,13 +330,30 @@ function addReservation(){
     //}
   });
 
+  let chairs=0;
+  for( let table of _glob.arr.tables ) chairs +=table.chairs // total amount of chairs
+
+  let table_chairs = ( id ) =>{
+    for( let table of _glob.arr.tables ){
+      if( table.id === id ){
+        return table.chairs; //  amount of chairs per table
+      }
+    }
+  }
+
+  // chairs occupied by reservations
+  for( let reservation of _glob.arr.reservations ) chairs -= table_chairs( reservation.table )
+
   $('input#persons').on( 'change', ( event ) => {
-    // check if persons is a number
-    //if( ! (isNaN( event.target.value )) ){
-    if(   event.target.value > 0 ){
+
+    if( event.target.value > 0 && event.target.value < chairs ){
       $( 'input#persons' ).removeClass( 'is-invalid' )//.addClass( 'is-valid' );
       $( '#persons-invalid' ).remove();
       valid_data = true;
+    }else if (event.target.value > chairs) {
+      $( '#persons-invalid' ).remove();
+      $( 'input#persons' ).removeClass( 'is-valid' ).addClass( 'is-invalid' ).after( '<div class="invalid-feedback" id="persons-invalid">More persons than seats available ('+chairs+')</div>' );
+      valid_data = false;
     }else{
       $( '#persons-invalid' ).remove();
       $( 'input#persons' ).removeClass( 'is-valid' ).addClass( 'is-invalid' ).after( '<div class="invalid-feedback" id="persons-invalid">Please provide a valid number for persons</div>' );
@@ -505,7 +522,7 @@ function updateReservation( id ){
     let _guest = document.getElementById('guest').value,
     _persons = document.getElementById('persons').value,
     _timestamp =  document.getElementById('timestamp').value,
-    _table =  document.getElementById('table').value,
+    _table =  document.getElementById('table').value;
     //_hasPaid =  document.getElementById('hasPaid').value;
 
 

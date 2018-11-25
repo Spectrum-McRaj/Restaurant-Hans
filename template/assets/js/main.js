@@ -16,7 +16,7 @@
     'class/Table',
 
     // Data
-    '../../data/glob_arr', // temporary arrays with dummy data for test/demo purposes
+    '../../data/glob', // global data
 
     // Template
     'template/navmenu',
@@ -25,7 +25,6 @@
     // Helpers
     'helpers/crEl',
     'helpers/glob',
-    //'helpers/glob_arr',
     'helpers/utils',
 
     // Modules
@@ -43,6 +42,7 @@
 
 
     globArr();
+    globModule();
     navMenu( _glob.arr.pages );
     pageHashLoad();
     window.onhashchange = pageHashLoad;
