@@ -120,6 +120,8 @@ main#page {
     padding: 24px 96px;
   }
 
+/* naviagtion */
+
 #page-navigation {
   position: absolute;
   bottom: 0;
@@ -171,6 +173,7 @@ main#page {
       color: #000 !important;
     }
 
+/* page header */
 
 #page-content h1 {
   font-size: 18px;
@@ -186,10 +189,17 @@ main#page {
   display: block;
 }
 
-#page_output button.btn{
+button.btn-primary{
+  background-color: #235f82 !important;
+}
 
+
+/* table */
+#page_output table {
+  user-select: none;
 }
 /* DataTable */
+
 #page_output table.dataTable thead .sorting:after {
   opacity: 0.2;
   content: "" !important;
@@ -203,6 +213,10 @@ main#page {
   content: "" !important;
   /* sort-by-attributes-alt */
 }
+
+
+/* print media */
+
 @media print{
   body{
     display: none;

@@ -203,11 +203,14 @@ function addReservation(){
         }
 
       });
-      let timestamp =  document.querySelector( 'input#timestamp' )
+      let timestamp =  document.querySelector( 'input#date' )
       //timestamp = new CrEl().act( timestamp, 'change', (event) =>{
         //console.log(event.target.value)
-
-      $('input#timestamp').datepicker( { format:'dd-mm-yyyy', startDate: '0' }).on( 'change' , (event) =>{
+      $('label').hide();
+      $('input.form-control').on( 'change', (event) => {
+        $(`label[for="${event.target.id}"]`).fadeIn();
+      });
+      $('input#date').datepicker( { format:'dd-mm-yyyy', startDate: '0' }).on( 'change' , (event) =>{
         // check date, if valid; valid_date = true
         let date = new Date(event.target.value),
         today = new Date(),
@@ -228,7 +231,7 @@ function addReservation(){
         //  let date = new Date( item[ field.field ] ),
            let date_options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
           $('#date_feedback').remove();
-          $('input#timestamp').after(`<small class="muted feedback" id="date_feedback">${date.toLocaleDateString( 'en-GB', date_options )}, over ${$.timeago(date).replace(' ago','')}</div>`);
+          $('input#date').after(`<small class="muted feedback" id="date_feedback">${date.toLocaleDateString( 'en-GB', date_options )}, over ${$.timeago(date).replace(' ago','')}</div>`);
         //}else{
       //    $('#date-invalid,#date-valid').remove();
       //    $('input#timestamp').removeClass('is-valid').addClass('is-invalid').after('<div class="invalid-feedback" id="date-invalid">Please provide a valid date for this reservation</div>');
@@ -249,6 +252,8 @@ function addReservation(){
 
       // chairs occupied by reservations
       for( let reservation of _glob.arr.reservations ) chairs -= table_chairs( reservation.table )
+      document.querySelector( `select#table_select option[value="${tableReservation()}"]`).selected = true;
+      $( 'label[for="table_select"]').show();
 
       $('input#persons').on( 'change', ( event ) => {
 

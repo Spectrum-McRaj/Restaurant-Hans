@@ -1,7 +1,7 @@
-<h3>Add Reservation</h3>
+<h3>Add Reservation</h3><hr />
   <form>
     <div class="form-group row">
-      <label class="col-sm-2 col-form-label">Guest</label>
+      <div class="col-sm-2 col-form-label"><strong>Guest</strong></div>
       <div class="form-group col-md-4">
         <label for="firstname">First name</label>
         <input type="text" class="form-control" id="firstname" placeholder="First name">
@@ -16,18 +16,79 @@
       </div>
     </div>
     <div class="form-group row">
-      <label class="col-sm-2 col-form-label" for="timestamp">Date/Time</label>
-      <div class="col-sm-10"><input id="timestamp" autocomplete="off" class="form-control"></div>
+      <div class="col-sm-2 col-form-label"></div>
+      <div class="form-group col-md-5">
+        <label for="email">E-mail</label>
+        <input type="text" class="form-control" id="email" placeholder="E-mail">
+      </div>
+
+      <div class="form-group col-md-5">
+        <label for="telephone">Telephone</label>
+        <input type="text" class="form-control" id="telephone" placeholder="Telephone">
+      </div>
     </div>
+
+<hr />
     <div class="form-group row">
-      <label class="col-sm-2 col-form-label" for="persons">Amount of persons</label>
-      <div class="col-sm-10"><input id="persons" autocomplete="off" type="number" class="form-control"></div>
+      <div class="col-sm-2 col-form-label"><strong>Reservation</strong></div>
+      <div class="form-group col-md-2">
+        <label for="persons">Persons</label>
+        <input type="number" class="form-control" id="persons" placeholder="Persons">
+      </div>
+      <div class="form-group col-md-2">
+        <label for="date">Date</label>
+        <input type="text" class="form-control" id="date" placeholder="Date">
+      </div>
+      <div class="form-group col-md-2">
+        <label for="time_arrival">Time Arrival</label>
+        <input type="text" class="form-control" id="time_arrival" placeholder="Time Arrival">
+      </div>
+      <div class="form-group col-md-2">
+        <label for="time_depart">Time Depart</label>
+        <input type="text" class="form-control" id="time_depart" placeholder="Time Depart">
+      </div>
+      <div class="form-group col-md-2">
+        <label for="table_select">Table</label>
+        <select multiple class="form-control" id="table_select">
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+          <option value="8">8</option>
+          <option value="9">9</option>
+          <option value="10">10</option>
+          <option value="11">11</option>
+          <option value="12">12</option>
+          <option value="13">13</option>
+          <option value="14">14</option>
+          <option value="15">15</option>
+          <option value="16">16</option>
+          <option value="17">17</option>
+          <option value="18">18</option>
+          <option value="19">19</option>
+          <option value="20">20</option>
+          <option value="21">21</option>
+          <option value="22">22</option>
+          <option value="23">23</option>
+          <option value="24">24</option>
+          <option value="25">25</option>
+          <option value="26">26</option>
+          <option value="27">27</option>
+          <option value="28">28</option>
+          <option value="29">29</option>
+          <option value="30">30</option>
+        </select>
+      </div>
     </div>
-    <div class="form-group row">
-      <label class="col-sm-2 col-form-label" for="table">Table</label>
-      <div class="col-sm-10"><input id="table" autocomplete="off" disabled="disabled" class="form-control"></div>
-    </div>
+
+
+
+
+
     <div class="row" style="padding:10px;">
-      <button class="btn ">Add Reservation</button>
+      <button class="btn btn-primary ">Save Reservation</button>
     </div>
   </form>
