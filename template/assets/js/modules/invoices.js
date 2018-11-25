@@ -13,17 +13,17 @@ let reservation = {
 /* einde nep gegevens */
 
 function mainInvoices(){
-  showInvoice();
+  showInvoice(reservation);
 }
 
-function showInvoice(reservation){
+function showInvoice(process_reservation){
   // NOTE: In Italy the euro sign comes BEHIND the price!!!
   // The system could be enhanced to make it compatible with other countries
   // Or other currencies.
   // Using , or . may also be an enhancement if this is customizable.
   var total=0;
   var calcVAT;
-  var output="<center><table><caption><b>Invoice Molveno</b></caption>";
+  var output='<center><table class="print"><caption><b>Invoice Molveno</b></caption>';
   output += `<tr><td colspan=2 align=right>Invoice for ${process_reservation.guest}`;
   let mitems = {}
   for (let item of process_reservation.items)   {
@@ -44,10 +44,17 @@ function showInvoice(reservation){
     output   += `<tr><td colspan=3 align=right>Total incl. VAT:</td><td align=right>${Number(total+calcVAT).toFixed(2).replace(".",",")} &euro;</td></tr>`;
     output   += "</table></center>";
     //return output
-    let page_output = document.querySelector( 'page_output' );
+    let page_output = document.querySelector( '#page_output' );
     page_output.innerHTML = output;
+    printInvoice();
 }
 
 /* node test!
 console.log(generate_invoice(reservation));
 //*/
+function printInvoice(){
+  let print_btn = document.querySelector( 'button.btn-print')
+  print_btn.addEventListener( 'click', (event) => {
+    window.print();
+  });
+}

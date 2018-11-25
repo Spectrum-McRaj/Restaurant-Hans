@@ -203,3 +203,11 @@ main#page {
   content: "" !important;
   /* sort-by-attributes-alt */
 }
+@media print{
+  body{
+    display: none;
+  }
+  .print{
+    display: block;
+  }
+}
