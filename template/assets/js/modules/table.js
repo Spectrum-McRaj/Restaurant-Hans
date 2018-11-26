@@ -30,3 +30,9 @@ function addTable(){
 function deleteTable(){
   console.log("deleteTable says hi");
 }
+/* -----------------------------------------------------------------------------
+* get
+*/
+function getTable( id ){
+  for( let table of _glob.arr.tables ) if( table.id === id/1 ) return table;
+}

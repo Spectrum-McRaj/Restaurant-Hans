@@ -29,7 +29,7 @@ function showInvoice(process_reservation){
   // Using , or . may also be an enhancement if this is customizable.
   var total=0;
   var calcVAT;
-  var output='<center><table class="print"><caption><b>Invoice Molveno</b></caption>';
+  var output='<center><table><caption><b>Invoice Molveno</b></caption>';
   output += `<tr><td colspan=2 align=right>Invoice for ${process_reservation.guest}`;
   let mitems = {}
   for (let item of process_reservation.items)   {
