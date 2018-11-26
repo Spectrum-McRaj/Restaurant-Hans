@@ -78,11 +78,12 @@ function pageHashLoad() { // called in assets/main.js
     pageUrl = `${pageId.split('/')[0]}.html`;
     if( pagePrev ){
       console.log( `navigated from ${pagePrev} to ${pageId}`)
+      glob( 'var' , 'currentPageId' , pageId);
       if( pagePrev.split('/')[0] === pageId.split('/')[0] ){
         pageFunction( pageId );
       } else {
         loadPage( pageUrl, pageId );
-        glob( 'var' , 'currentPageId' , pageId);
+
       }
     } else {
       loadPage( pageUrl, pageId );

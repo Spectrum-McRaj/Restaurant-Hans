@@ -1,3 +1,9 @@
+'use strict'
+/*
+* assets/js/modules/invoices.js
+* TODO : build module; add functions (overview, view, add, update & delete) to let things happen
+*/
+
 /* nep gegevens */
 let config = {
      VAT:10 // VAT is de engelse term voor BTW. Ik ben even voor het gemak uitgegaan van 20%, dit kan later wellicht veranderd worden!

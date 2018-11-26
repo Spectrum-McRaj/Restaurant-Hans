@@ -16,26 +16,19 @@ function mainReservations(){
 }
 
 function getReservation( id ){
-  let arrayReservation = _glob.arr.reservations;
-  for( let item of arrayReservation ){
-    if( item.id === id ) return item;
+  for( let reservation of _glob.arr.reservations ){
+    if( reservation.id === id ) return reservation;
   }
 }
 
-function setReservation(reservation){
-  console.log("set res");
-  let id = reservation.id;
+function setReservation( reservation ){
   for(let i = 0; i < _glob.arr.reservations.length; i++){
-
-    if( _glob.arr.reservations[i].id === id ){
-      _glob.arr.reservations[i] = reservation;
-      console.log(_glob.arr.reservations[i].hasPaid + "");}
-
+    if( _glob.arr.reservations[i].id === reservation.id ) _glob.arr.reservations[i] = reservation;
   }
 }
 
 /* -----------------------------------------------------------------------------
-* add
+* overview
 */
 
 function overviewReservations(){
@@ -50,7 +43,7 @@ function overviewReservations(){
     { label : 'Guest', field : 'guest' },
     { label : 'Persons', field : 'persons' },
     { label : 'Table', field : 'table' },
-    { label : 'Paid', field : 'hasPaid'},
+    //{ label : 'Paid', field : 'hasPaid'},
     { label : '', field : 'options' },
 
   ]
@@ -157,87 +150,20 @@ function addReservation(){
   navActiveItm( 'reservations/add' );
   let output = document.querySelector( '#page_output' ); // element for ouput in UI
   $( output ).load( 'templates/add-reservation.html', ()=> {
-        let add_form = document.querySelector( '#page_output form' ),
-        valid_date = false,
-        valid_data = true;
-      // form submit
-       add_form.addEventListener( 'submit', (event) => {
-        event.preventDefault() // prevent form submit
-
-        let _guest = document.getElementById('guest').value;
-        let _persons = document.getElementById('persons').value;
-        let _timestamp =  document.getElementById('timestamp').value;
-        let _table =  document.getElementById('table').value;
-        //let add_data = new FormData( add_form ); // get data from form
-        // TODO : find out why FormData( add_form ) returns empty?
-        let add_data = {
-          guest : _guest,
-          persons : _persons,
-          timestamp : _timestamp,
-          table : _table
-        }
-        //console.log(add_data)
-
-        if( ! valid_date ){ //invalid date
-          bsAlert( '#page_output','warning','','Invalid date' )
-
-          valid_data = false;
-        }
-        if ( (isNaN(_persons/1)) ) {
-            bsAlert( '#page_output','warning','','Persons must be a number' )
-            valid_data = false;
-
-        }
-        if(valid_data){
-
-          add_data[ 'id' ] = getRandomInt(1000,9999); // generate & assign random int as id
-           // save reservation to array
-           arrayReservation.unshift( add_data );
-          _glob.arr.reservations = arrayReservation;
-          let reservation_add = new Reservation( add_data );
-          console.log(reservation_add);
-          //arrayReservation.unshift( reservation_add );
-          //location.hash = '#reservations'
-          bsAlert( '.page-content','primary','',`Reservation for <b>${add_data.guest}</b> has been saved` )
-          overviewReservations();
-        }
-
-      });
-      let timestamp =  document.querySelector( 'input#date' )
-      //timestamp = new CrEl().act( timestamp, 'change', (event) =>{
-        //console.log(event.target.value)
-      $('label').hide();
+      let add_form = document.querySelector( '#page_output form' ),
+      valid_date = false,
+      valid_data = true;
+      document.querySelector('button').setAttribute( 'disabled','disabled' ); // disable button
+      $('label').hide(); // hide labels (while placeholders are visible)
       $('input.form-control').on( 'change', (event) => {
-        $(`label[for="${event.target.id}"]`).fadeIn();
+        $(`label[for="${event.target.id}"]`).fadeIn(); // show label on input change (placeholders are not visible)
       });
+      // date input
       $('input#date').datepicker( { format:'dd-mm-yyyy', startDate: '0' }).on( 'change' , (event) =>{
-        // check date, if valid; valid_date = true
-        let date = new Date(event.target.value),
-        today = new Date(),
-        ss = today.getSeconds(),
-        mM = today.getMinutes(),
-        hh = today.getHours(),
-        dd = today.getDate(),
-        mm = today.getMonth()+1,
-        yyyy = today.getFullYear();
-        today = new Date(`${dd}-${mm}-${yyyy}`);
-
-        //console.log(date.getTime())
-        //console.log(today.getTime())
-        //if ((date.getTime()>=today.getTime())){ // TODO : date of today is invalid
-          valid_date = true;
-          //$('#date-invalid,#date-valid').remove();
-          //$('input#timestamp').removeClass('is-invalid').addClass('is-valid').after('<div class="valid-feedback" id="date-valid">over '+$.timeago(date).replace(' ago','')+'</div>');
-        //  let date = new Date( item[ field.field ] ),
-           let date_options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-          $('#date_feedback').remove();
-          $('input#date').after(`<small class="muted feedback" id="date_feedback">${date.toLocaleDateString( 'en-GB', date_options )}, over ${$.timeago(date).replace(' ago','')}</div>`);
-        //}else{
-      //    $('#date-invalid,#date-valid').remove();
-      //    $('input#timestamp').removeClass('is-valid').addClass('is-invalid').after('<div class="invalid-feedback" id="date-invalid">Please provide a valid date for this reservation</div>');
-        //  valid_date = false;
-        //}
+        $('#date_feedback').remove();
+        $('input#date').after(`<small class="muted feedback" id="date_feedback">${moment(event.target.value, "DD-MM-YYYY").calendar()}</div>`);
       });
+      //$('input#time_arrival').timepicker();
 
       let chairs=0;
       for( let table of _glob.arr.tables ) chairs +=table.chairs // total amount of chairs
@@ -251,17 +177,28 @@ function addReservation(){
       }
 
       // chairs occupied by reservations
-      for( let reservation of _glob.arr.reservations ) chairs -= table_chairs( reservation.table )
+      for( let reservation of _glob.arr.reservations ) chairs -= table_chairs( reservation.table );
+      // select random unoccupied table
       document.querySelector( `select#table_select option[value="${tableReservation()}"]`).selected = true;
-      $( 'label[for="table_select"]').show();
+      $( 'label[for="table_select"]').show(); // show label for table select
 
       $('input#persons').on( 'change', ( event ) => {
 
-        if( event.target.value > 0 && event.target.value < chairs ){
+        if( event.target.value > 0 && event.target.value < chairs ){ // persons is OK
           $( 'input#persons' ).removeClass( 'is-invalid' )//.addClass( 'is-valid' );
           $( '#persons-invalid' ).remove();
           valid_data = true;
-        }else if (event.target.value > chairs) {
+
+          // TODO : we want to select a table with more seats or combine tables
+          // ---------------------------------------------------------------------
+              // we want at this point to select & combine tables
+              // (if the amount of persons requires this)
+              // NOTE : calls something like selectTable( persons );
+              //  which returns a array of selected available table(s);
+              // use this to select options of table field
+
+
+        }else if (event.target.value > chairs) { // persons more than available seats
           $( '#persons-invalid' ).remove();
           $( 'input#persons' ).removeClass( 'is-valid' ).addClass( 'is-invalid' ).after( '<div class="invalid-feedback" id="persons-invalid">'+(event.target.value/1-chairs)+' more persons than seats available ('+chairs+')</div>' );
           valid_data = false;
@@ -270,15 +207,61 @@ function addReservation(){
           $( 'input#persons' ).removeClass( 'is-valid' ).addClass( 'is-invalid' ).after( '<div class="invalid-feedback" id="persons-invalid">Please provide a valid number for persons</div>' );
           valid_data = false;
         }
-        // TODO : we want to select a table with more seats or combine tables
-        // ---------------------------------------------------------------------------
-            // we want at this point to select & combine tables
-            // (if the amount of persons requires this)
-            // SUGGESTION : calls something like selectTable( persons );
-            //  which returns a array of selected available table(s);
+
         if( valid_data ){
+          document.querySelector('button').removeAttribute('disabled'); // enable button
+        }
+      });
+      // -----------------------------------------------------------------------
+      // form submit
+       add_form.addEventListener( 'submit', (event) => {
+        event.preventDefault() // prevent form submit
+        let reservationId = getRandomInt(10000,99999),
+        guest_data = {
+          firstname : document.getElementById('firstname').value,
+          preposition : document.getElementById('preposition').value,
+          lastname : document.getElementById('lastname').value,
+          email : document.getElementById('email').value,
+          telephone : document.getElementById('telephone').value,
+          reservation : reservationId
+        },
+        _guest = addGuestFromReservation( guest_data ),
+        _persons = document.getElementById('persons').value,
+        _timestamp =  document.getElementById('timestamp').value,
+        _table =  document.getElementById('table').value,
+        add_data = {
+          id : reservationId,
+          guest : _guest,
+          persons : _persons,
+          timestamp : _timestamp,
+          table : _table
+        };
+        //console.log(add_data)
+
+        if( ! valid_date ){ //invalid date
+          bsAlert( '#page_output','warning','','Invalid date' )
+          valid_data = false;
+        }
+        if ( (isNaN(_persons/1)) ) {
+          bsAlert( '#page_output','warning','','Persons must be a number' )
+          valid_data = false;
 
         }
+        if(valid_data){
+
+
+           // save reservation to array
+           arrayReservation.unshift( add_data );
+          _glob.arr.reservations = arrayReservation;
+          let reservation_add = new Reservation( add_data );
+          console.log(reservation_add);
+
+          let guest_name_prepostion = guest_data.preposition;
+          if( guest_name_prepostion !== '') guest_name_prepostion =+ ' ';
+          bsAlert( '.page-content','primary','',`Reservation for <b>${guest_data.firstname} ${guest_name_prepostion}${guest_data.lastname}</b> has been saved` )
+          overviewReservations();
+        }
+
       });
   });
 

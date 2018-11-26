@@ -28,6 +28,7 @@
     'helpers/utils',
 
     // Modules
+    'modules/dashboard',
     'modules/guest',
     'modules/ingredient',
     'modules/menu',
