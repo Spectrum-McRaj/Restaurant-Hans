@@ -179,7 +179,9 @@ function addReservation(){
       // chairs occupied by reservations
       for( let reservation of _glob.arr.reservations ) chairs -= table_chairs( reservation.table );
       // select random unoccupied table
-      document.querySelector( `select#table_select option[value="${tableReservation()}"]`).selected = true;
+      let table = tableReservation();
+      console.log(table)
+      document.querySelector( `select#table_select option[value="${table}"]`).selected = true;
       $( 'label[for="table_select"]').show(); // show label for table select
       let update_header = () => {
         let firstname = document.querySelector( 'input#firstname' ).value,
@@ -205,7 +207,7 @@ function addReservation(){
       $('input#firstname,input#preposition,input#lastname').on( 'keyup', ( event ) => update_header() );
       $('select#table_select').on( 'change', ( event ) => update_header() );
       $('input#persons').on( 'change', ( event ) => {
-
+        table = document.querySelector( `select#table_select` );
         if( event.target.value > 0 && event.target.value < chairs ){ // persons is OK
           $( 'input#persons' ).removeClass( 'is-invalid' )//.addClass( 'is-valid' );
           $( '#persons-invalid' ).remove();
@@ -219,6 +221,36 @@ function addReservation(){
               //  which returns a array of selected available table(s);
               // use this to select options of table field
 
+
+
+          let checkPersonsTableSeats = () => {
+            let count = 0,seats = 0,tables_arr = [];
+            for (let i=0; i<table.options.length; i++) {
+              if (table.options[i].selected) {
+                tables_arr.push(  table.options[i].value/1 )
+                tables[count] =table.options[i].value;
+                count++;
+                seats += getTable(table.options[i].value).chairs
+              }
+            }
+
+            let persons = document.querySelector('input#persons').value;
+            if( persons > seats ){
+              if( !isTableReservationOccupied( tables_arr[tables_arr.length-1]+1 ) ){ // check if next table is occupied
+                document.querySelector( `select#table_select option[value="${tables_arr[tables_arr.length-1]+1}"]`).selected = true;
+                update_header();
+              }else { // next table is occupied
+                if( !isTableReservationOccupied( tables_arr[tables_arr.length-1]-1 ) ){ // check if previous table is occupied
+                  document.querySelector( `select#table_select option[value="${tables_arr[tables_arr.length-1]-1}"]`).selected = true;
+                  update_header();
+                }else{ // previous table is occupied; select new table
+
+                }
+              }
+            } else {
+
+            }
+          }
 
         }else if (event.target.value > chairs) { // persons more than available seats
           $( '#persons-invalid' ).remove();
