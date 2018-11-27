@@ -15,7 +15,7 @@ function overviewMenu(){
 /* -----------------------------------------------------------------------------
 * view
 */
-function viewMenu(){
+function viewMenu( id ){
   console.log("viewMenu says hi");
 }
 /* -----------------------------------------------------------------------------
@@ -25,8 +25,14 @@ function addMenu(){
   console.log("addMenu says hi");
 }
 /* -----------------------------------------------------------------------------
+* update
+*/
+function updateMenu( id ){
+  console.log("updateMenu says hi");
+}
+/* -----------------------------------------------------------------------------
 * delete
 */
-function deleteMenu(){
+function deleteMenu( id ){
   console.log("deleteMenu says hi");
 }

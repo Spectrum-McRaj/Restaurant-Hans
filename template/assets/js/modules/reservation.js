@@ -182,15 +182,25 @@ function addReservation(){
       document.querySelector( `select#table_select option[value="${tableReservation()}"]`).selected = true;
       $( 'label[for="table_select"]').show(); // show label for table select
       let update_header = () => {
-        let firstname = $( 'input#firstname' ).val();
-        let preposition = $( 'input#preposition' ).val();
+        let firstname = document.querySelector( 'input#firstname' ).value,
+        preposition = document.querySelector( 'input#preposition' ).value,
+        lastname = document.querySelector( 'input#lastname' ).value,
+        name,
+        table = document.querySelector( `select#table_select` ),
+        tables = [],
+        count = 0,
+        seats = 0;
         if( preposition !== '' ) preposition += ' ';
-        let lastname = $( 'input#lastname' ).val();
-        let name = firstname + ' ' + preposition + lastname;
-        let table = document.querySelector( `select#table_select` ).value;
+        name = firstname + ' ' + preposition + lastname;
+        for (let i=0; i<table.options.length; i++) {
+          if (table.options[i].selected) {
+            tables[count] =table.options[i].value;
+            count++;
+            seats += getTable(table.options[i].value).chairs
+          }
+        }
 
-
-        $( '#page_output h3').html( `Add Reservation <small class="text-muted">for <b>${name}</b> at table <b>${table}</b> (${getTable(table).chairs} seats)<small>`);
+        $( '#page_output h3').html( `Add Reservation <small class="text-muted">for <b>${name}</b> at table <b>${tables.join('+')}</b> (${seats} seats)<small>`);
       }
       $('input#firstname,input#preposition,input#lastname').on( 'keyup', ( event ) => update_header() );
       $('select#table_select').on( 'change', ( event ) => update_header() );
