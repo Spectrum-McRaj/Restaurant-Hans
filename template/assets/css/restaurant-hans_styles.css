@@ -189,8 +189,18 @@ main#page {
   display: block;
 }
 
-button.btn-primary{
-  background-color: #235f82 !important;
+.btn {
+  margin-right: 8px;
+}
+
+.btn-primary {
+  background-color: #235F82 !important;
+  border-color: #235F82 !important;
+}
+
+.btn-light {
+  background-color: rgba(0,0,0,0) !important;
+  border-color: #9eb1bc !important;
 }
 
 
@@ -223,5 +233,19 @@ button.btn-primary{
   }
   .print{
     display: block;
+  }
+}
+
+@media (max-width: 1024px) {
+  main#page .page-header > h2 {
+    padding: 24px 16px 0 16px;
+    color: #fff;
+    font-size: 20px;
+  }
+  main#page #page-navigation {
+    padding: 0 16px;
+  }
+  main#page .page-content {
+    padding: 24px 16px;
   }
 }
