@@ -66,5 +66,5 @@ function setTable( table ){
 * is
 */
 function isTableReservationOccupied( table ){
-  for( let reservation of _glob.arr.reservations )if( reservation.table/1 === id/1 ) return true;
+  for( let reservation of _glob.arr.reservations )if( reservation.table/1 === table/1 ) return true;
 }
