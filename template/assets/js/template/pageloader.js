@@ -90,5 +90,7 @@ function pageHashLoad() { // called in assets/main.js
       glob( 'var' , 'currentPageId' , pageId);
     }
 
+  } else {
+    location.hash = '#dashboard';
   }
 }

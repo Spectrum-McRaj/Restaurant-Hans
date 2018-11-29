@@ -130,7 +130,7 @@ function addReservation(){
                   update_header();
                 }else{ // previous table is occupied; select new table and check if it's occupied
                   let new_table = getTableBySeats( document.querySelector('input#persons').value );
-                  console.log( new_table )
+              
                   document.querySelector( `select#table_select option[value="${new_table}"]`).selected = true;
                   checkPersonsTableSeats();
                   //if( !isTableReservationOccupied( tableReservation() ) )
