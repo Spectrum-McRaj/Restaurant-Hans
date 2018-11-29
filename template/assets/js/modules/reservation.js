@@ -26,122 +26,6 @@ function setReservation( reservation ){
     if( _glob.arr.reservations[i].id === reservation.id ) _glob.arr.reservations[i] = reservation;
   }
 }
-
-/* -----------------------------------------------------------------------------
-* overview
-*/
-
-function overviewReservations(){
-  navActiveItm( 'reservations/overview' );
-  $( 'nav#primary a#reservations').addClass( 'active' );
-  let nav_tab_active = document.querySelector( '.nav-link.active' );
-  nav_tab_active.innerText = `Overview`;
-
-  let arrayReservation = _glob.arr.reservations;
-  let overview_fields = [
-    { label : 'Date/Time', field : 'timestamp' },
-    { label : 'Guest', field : 'guest' },
-    { label : 'Persons', field : 'persons' },
-    { label : 'Table', field : 'table' },
-    //{ label : 'Paid', field : 'hasPaid'},
-    { label : '', field : 'options' },
-
-  ]
-
-  let table = document.createElement( 'table' ),
-  table_thead = document.createElement( 'thead' ),
-  table_tr = document.createElement( 'tr' ),
-  output = document.getElementById( 'page_output' );
-  table.setAttribute( 'class','table table-hover' )
-  for( let field of overview_fields ){
-    let table_th = document.createElement( 'th' );
-    // TODO : fix (col width jump at row hover) in stylesheet
-    if( field.field === 'timestamp' || field.field === 'options' || field.field === 'guest'  ) table_th.setAttribute( 'style', 'width:225px;' )
-    if( field.field === 'table' || field.field === 'persons' ) table_th.setAttribute( 'style', 'width:50px;' )
-    if( field.field === 'hasPaid' ) table_th.setAttribute( 'style', 'width:15px;' );
-    table_th.innerText = field.label;
-    table_tr.appendChild( table_th );
-  }
-
-  table_thead.appendChild( table_tr );
-  table.appendChild( table_thead );
-
-  let table_tbody = document.createElement( 'tbody' );
-  for( let item of arrayReservation ) {
-    table_tr = document.createElement( 'tr' );
-    // options buttons
-
-    let button_paid = document.createElement( 'button' );
-    button_paid.setAttribute( 'class', 'btn btn-sm' )
-    button_paid.innerHTML = '<i class="far fa-edit"></i> paid';
-    button_paid.addEventListener( 'click', (event) => {
-      hasPaidReservation(!(item.hasPaid), item.id);
-    });
-
-    let button_edit = document.createElement( 'button' );
-    button_edit.setAttribute( 'class', 'btn btn-sm' )
-    button_edit.innerHTML = '<i class="far fa-edit"></i> Edit';
-    button_edit.addEventListener( 'click', (event) => {
-      updateReservation( item.id )
-    });
-
-    let button_delete = document.createElement( 'button' );
-    button_delete.setAttribute( 'class', 'btn btn-sm' )
-    button_delete.innerHTML = '<i class="fas fa-minus-circle"></i> Delete';
-    button_delete.addEventListener( 'click', (event) => {
-      deleteReservation( item.id )
-    });
-
-    let button_group = document.createElement( 'div' );
-    button_group.setAttribute( 'class','btn-group btn-group-sm' );
-    //button_group.appendChild( button_paid );
-    button_group.appendChild( button_edit );
-    button_group.appendChild( button_delete );
-
-
-    for( let field of overview_fields ){
-      let table_td = document.createElement( 'td' );
-      if ( field.field === 'options' ){ // edit/delete buttons
-        table_td.setAttribute( 'style', 'text-align:right;width:125px;')
-        table_td.appendChild( button_group );
-
-      }else if (field.field === 'hasPaid'){
-        if( item[ field.field ] ){
-          table_td.innerHTML = '<i class="far fa-check-square"></i>';
-        }else{
-          table_td.innerHTML = '<i class="far fa-square"></i>';
-        }
-        table_td.addEventListener( 'click', (event) =>{
-          hasPaidReservation(!(item.hasPaid), item.id)
-        })
-        table_td.setAttribute( 'style','cursor:pointer')
-
-      }else if (field.field === 'timestamp') {
-
-        let date = new Date( item[ field.field ] ),
-         date_options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
-        table_td.innerText = date.toLocaleDateString( 'en-US', date_options )+', '+item[ field.field ].split('T')[1]+' (over '+$.timeago(item[ field.field ]).replace(' ago','')+')';
-
-      }else {
-        table_td.innerText = item[ field.field ];
-      }
-
-      table_tr.appendChild( table_td );
-      // TODO : fix (row height jump at hover) in stylesheet
-      table_tr.setAttribute( 'style', 'height:56px;')
-    }
-
-    table_tbody.appendChild( table_tr )
-
-  }
-  table.appendChild( table_tbody )
-  output.innerHTML = '';
-  output.appendChild( table );
-
-  $( 'table' ).DataTable();
-  if( arrayReservation.length < 11 ) $('ul.pagination').hide();
-
-}
 /* -----------------------------------------------------------------------------
 * add
 */
@@ -196,6 +80,7 @@ function addReservation(){
         name = firstname + ' ' + preposition + lastname;
         for (let i=0; i<table.options.length; i++) {
           if (table.options[i].selected) {
+
             tables[count] =table.options[i].value;
             count++;
             seats += getTable(table.options[i].value).chairs
@@ -206,8 +91,10 @@ function addReservation(){
       }
       $('input#firstname,input#preposition,input#lastname').on( 'keyup', ( event ) => update_header() );
       $('select#table_select').on( 'change', ( event ) => update_header() );
+      table = document.querySelector( `select#table_select` );
+      for ( let i = 0; i < table.options.length; i++ )  if( isTableReservationOccupied( table.options[i].value ) ) table.options[i].setAttribute('disabled','disabled');
       $('input#persons').on( 'change', ( event ) => {
-        table = document.querySelector( `select#table_select` );
+
         if( event.target.value > 0 && event.target.value < chairs ){ // persons is OK
           $( 'input#persons' ).removeClass( 'is-invalid' )//.addClass( 'is-valid' );
           $( '#persons-invalid' ).remove();
@@ -215,22 +102,20 @@ function addReservation(){
 
           // TODO : we want to select a table with more seats or combine tables
           // ---------------------------------------------------------------------
-              // we want at this point to select & combine tables
-              // (if the amount of persons requires this)
-              // NOTE : calls something like selectTable( persons );
-              //  which returns a array of selected available table(s);
-              // use this to select options of table field
-
 
 
           let checkPersonsTableSeats = () => {
-            let count = 0,seats = 0,tables_arr = [];
-            for (let i=0; i<table.options.length; i++) {
+            let count = 0, seats = 0, tables_arr = [];
+
+            for ( let i = 0; i < table.options.length; i++ ) {
               if (table.options[i].selected) {
-                tables_arr.push(  table.options[i].value/1 )
-                tables[count] =table.options[i].value;
-                count++;
-                seats += getTable(table.options[i].value).chairs
+
+                  tables_arr.push(  table.options[i].value/1 );
+                  tables[count] =table.options[i].value;
+                  count++;
+                  seats += getTable(table.options[i].value).chairs;
+
+
               }
             }
 
@@ -239,19 +124,23 @@ function addReservation(){
               if( !isTableReservationOccupied( tables_arr[tables_arr.length-1]+1 ) ){ // check if next table is occupied
                 document.querySelector( `select#table_select option[value="${tables_arr[tables_arr.length-1]+1}"]`).selected = true;
                 update_header();
-              }else { // next table is occupied
+              }else { // next table is occupied; select previous table
                 if( !isTableReservationOccupied( tables_arr[tables_arr.length-1]-1 ) ){ // check if previous table is occupied
                   document.querySelector( `select#table_select option[value="${tables_arr[tables_arr.length-1]-1}"]`).selected = true;
                   update_header();
-                }else{ // previous table is occupied; select new table
-
+                }else{ // previous table is occupied; select new table and check if it's occupied
+                  let new_table = getTableBySeats( document.querySelector('input#persons').value );
+                  console.log( new_table )
+                  document.querySelector( `select#table_select option[value="${new_table}"]`).selected = true;
+                  checkPersonsTableSeats();
+                  //if( !isTableReservationOccupied( tableReservation() ) )
                 }
               }
             } else {
 
             }
-          }
-
+          } // checkPersonsTableSeats
+            checkPersonsTableSeats();
         }else if (event.target.value > chairs) { // persons more than available seats
           $( '#persons-invalid' ).remove();
           $( 'input#persons' ).removeClass( 'is-valid' ).addClass( 'is-invalid' ).after( '<div class="invalid-feedback" id="persons-invalid">'+(event.target.value/1-chairs)+' more persons than seats available ('+chairs+')</div>' );
@@ -463,6 +352,122 @@ function addReservation(){
   $( 'nav#primary a#reservations').addClass( 'active' );
 }//
 
+
+/* -----------------------------------------------------------------------------
+* overview
+*/
+
+function overviewReservations(){
+  navActiveItm( 'reservations/overview' );
+  $( 'nav#primary a#reservations').addClass( 'active' );
+  let nav_tab_active = document.querySelector( '.nav-link.active' );
+  nav_tab_active.innerText = `Overview`;
+
+  let arrayReservation = _glob.arr.reservations;
+  let overview_fields = [
+    { label : 'Date/Time', field : 'timestamp' },
+    { label : 'Guest', field : 'guest' },
+    { label : 'Persons', field : 'persons' },
+    { label : 'Table', field : 'table' },
+    //{ label : 'Paid', field : 'hasPaid'},
+    { label : '', field : 'options' },
+
+  ]
+
+  let table = document.createElement( 'table' ),
+  table_thead = document.createElement( 'thead' ),
+  table_tr = document.createElement( 'tr' ),
+  output = document.getElementById( 'page_output' );
+  table.setAttribute( 'class','table table-hover' )
+  for( let field of overview_fields ){
+    let table_th = document.createElement( 'th' );
+    // TODO : fix (col width jump at row hover) in stylesheet
+    if( field.field === 'timestamp' || field.field === 'options' || field.field === 'guest'  ) table_th.setAttribute( 'style', 'width:225px;' )
+    if( field.field === 'table' || field.field === 'persons' ) table_th.setAttribute( 'style', 'width:50px;' )
+    if( field.field === 'hasPaid' ) table_th.setAttribute( 'style', 'width:15px;' );
+    table_th.innerText = field.label;
+    table_tr.appendChild( table_th );
+  }
+
+  table_thead.appendChild( table_tr );
+  table.appendChild( table_thead );
+
+  let table_tbody = document.createElement( 'tbody' );
+  for( let item of arrayReservation ) {
+    table_tr = document.createElement( 'tr' );
+    // options buttons
+
+    let button_paid = document.createElement( 'button' );
+    button_paid.setAttribute( 'class', 'btn btn-sm' )
+    button_paid.innerHTML = '<i class="far fa-edit"></i> paid';
+    button_paid.addEventListener( 'click', (event) => {
+      hasPaidReservation(!(item.hasPaid), item.id);
+    });
+
+    let button_edit = document.createElement( 'button' );
+    button_edit.setAttribute( 'class', 'btn btn-sm' )
+    button_edit.innerHTML = '<i class="far fa-edit"></i> Edit';
+    button_edit.addEventListener( 'click', (event) => {
+      updateReservation( item.id )
+    });
+
+    let button_delete = document.createElement( 'button' );
+    button_delete.setAttribute( 'class', 'btn btn-sm' )
+    button_delete.innerHTML = '<i class="fas fa-minus-circle"></i> Delete';
+    button_delete.addEventListener( 'click', (event) => {
+      deleteReservation( item.id )
+    });
+
+    let button_group = document.createElement( 'div' );
+    button_group.setAttribute( 'class','btn-group btn-group-sm' );
+    //button_group.appendChild( button_paid );
+    button_group.appendChild( button_edit );
+    button_group.appendChild( button_delete );
+
+
+    for( let field of overview_fields ){
+      let table_td = document.createElement( 'td' );
+      if ( field.field === 'options' ){ // edit/delete buttons
+        table_td.setAttribute( 'style', 'text-align:right;width:125px;')
+        table_td.appendChild( button_group );
+
+      }else if (field.field === 'hasPaid'){
+        if( item[ field.field ] ){
+          table_td.innerHTML = '<i class="far fa-check-square"></i>';
+        }else{
+          table_td.innerHTML = '<i class="far fa-square"></i>';
+        }
+        table_td.addEventListener( 'click', (event) =>{
+          hasPaidReservation(!(item.hasPaid), item.id)
+        })
+        table_td.setAttribute( 'style','cursor:pointer')
+
+      }else if (field.field === 'timestamp') {
+
+        let date = new Date( item[ field.field ] ),
+         date_options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
+        table_td.innerText = date.toLocaleDateString( 'en-US', date_options )+', '+item[ field.field ].split('T')[1]+' (over '+$.timeago(item[ field.field ]).replace(' ago','')+')';
+
+      }else {
+        table_td.innerText = item[ field.field ];
+      }
+
+      table_tr.appendChild( table_td );
+      // TODO : fix (row height jump at hover) in stylesheet
+      table_tr.setAttribute( 'style', 'height:56px;')
+    }
+
+    table_tbody.appendChild( table_tr )
+
+  }
+  table.appendChild( table_tbody )
+  output.innerHTML = '';
+  output.appendChild( table );
+
+  $( 'table' ).DataTable();
+  if( arrayReservation.length < 11 ) $('ul.pagination').hide();
+
+}
 
 /* -----------------------------------------------------------------------------
 * update

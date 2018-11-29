@@ -36,6 +36,22 @@ function deleteTable(){
 function getTable( id ){
   for( let table of _glob.arr.tables ) if( table.id === id/1 ) return table;
 }
+
+function getTablesSeats( tables ){
+  let seats = 0;
+  for( let table of tables ){
+    seats += getTable( table ).seats;
+  }
+}
+
+function getTableBySeats( persons ){
+    for( let table of _glob.arr.tables ){
+      if( persons/1 <= table.seats/1 ){
+        return table.id;
+      }
+    }
+}
+
 /* -----------------------------------------------------------------------------
 * set
 */
@@ -45,26 +61,10 @@ function setTable( table ){
   }
 }
 
-function getTablesSeats( tables ){
-  let seats = 0;
-  for( let table of tables ){
-    seats += getTable( table ).seats;
-  }
-}
 
-function isTableReservationOccupied( id ){
-  let isOccupied = false;
-  for( let reservation of _glob.arr.reservations ){
-    if( reservation.id = id ){
-      return false;
-    }
-  }
-}
-
-function getTableBySeats( persons ){
-    for( let table of _glob.arr.tables ){
-      if( persons <= table.seats ){
-        return table.id;
-      }
-    }
+/* -----------------------------------------------------------------------------
+* is
+*/
+function isTableReservationOccupied( table ){
+  for( let reservation of _glob.arr.reservations )if( reservation.table/1 === id/1 ) return true;
 }
